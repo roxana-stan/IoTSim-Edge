@@ -4,30 +4,15 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.power.PowerVm;
 import org.edge.core.feature.operation.EdgeOperation;
 
 public class MicroELement extends Vm {
 
-
-
-
-	
-
-
 	private EdgeOperation edgeOperation;
-
-	public EdgeOperation getEdgeOperation() {
-		return edgeOperation;
-	}
-	public void setEdgeOperation(EdgeOperation edgeOperation) {
-		this.edgeOperation = edgeOperation;
-	}
 	private int datasize;
 	private int payload;
 	private MicroELement upLink;
-	
-
+	private List<MicroELement> downLink;
 
   /**
    * TODO 
@@ -37,15 +22,31 @@ public class MicroELement extends Vm {
    * 
    * 
    */
-
-
-	private List<MicroELement> downLink;
 	
+	public MicroELement(int id, int userId, double mips, int numberOfPes,
+						int ram, long bw, long size, String vmm,
+						CloudletScheduler cloudletScheduler) {
+		super(id, userId, mips, numberOfPes, ram, bw, size, vmm, cloudletScheduler);
+	}
 	
+	public MicroELement(int id, int userId, double mips, int numberOfPes,
+						int ram, long bw, long size, String vmm,
+						CloudletScheduler cloudletScheduler, String type, float shrinkingFactor) {
+		super(id, userId, mips, numberOfPes, ram, bw, size, vmm, cloudletScheduler);
+	}
 	
-	public  void updateDataSize() {
-		
-	}public MicroELement getUpLink() {
+	public EdgeOperation getEdgeOperation() {
+		return edgeOperation;
+	}
+	
+	public void setEdgeOperation(EdgeOperation edgeOperation) {
+		this.edgeOperation = edgeOperation;
+	}
+	
+	public void updateDataSize() {
+	}
+	
+	public MicroELement getUpLink() {
 		return upLink;
 	}
 
@@ -60,14 +61,6 @@ public class MicroELement extends Vm {
 	public void setDownLink(List<MicroELement> downLink) {
 		this.downLink = downLink;
 	}
-	/*
-	public EdgeOperation getOperation() {
-		return operation;
-	}
-
-	public void setOperation(EdgeOperation operation) {
-		this.operation = operation;
-	}*/
 
 	public int getDatasize() {
 		return datasize;
@@ -84,22 +77,5 @@ public class MicroELement extends Vm {
 	public void setPayload(int payload) {
 		this.payload = payload;
 	}
-
-
-
-
-	
-	public MicroELement(int id, int userId, double mips, int numberOfPes, int ram, long bw, long size, String vmm,
-			CloudletScheduler cloudletScheduler) {
-		super(id, userId, mips, numberOfPes, ram, bw, size,vmm, cloudletScheduler);
-	}
-	
-	public MicroELement(int id, int userId, double mips, int numberOfPes, int ram, long bw, long size, String vmm,
-			CloudletScheduler cloudletScheduler,String type,float shrinkingFactor) {
-		super(id, userId, mips, numberOfPes, ram, bw, size,vmm, cloudletScheduler);
-		
-	}
-	
-	
 
 }

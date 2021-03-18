@@ -23,8 +23,7 @@ import org.edge.exception.MicroElementNotFoundException;
 import org.edge.utils.LogUtil;
 
 /**
- * this a network manager and decision maker for setting up connection and event
- * transferring.
+ * This a network manager and decision maker for setting up connection and event transferring.
  * 
  * @author cody
  *
@@ -82,7 +81,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 	}
 
 	/**
-	 * submit edgelets to its downlink
+	 * Submit edgelets to its downlink
 	 * 
 	 * @param ev
 	 */
@@ -102,16 +101,14 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 			// added by Areeb
 			LogUtil.info("microELement.getId() " + microELement.getId());
 			
-			
-			data.getConnectionHeader().vmId=microELement.getId();
+			data.getConnectionHeader().vmId = microELement.getId();
 			newInstance.setConnectionHeader(data.getConnectionHeader());
 			newInstance.setVmId(microELement.getId());
 			newInstance.setUserId(this.getId());
 			
-			LogUtil.info("shrinked Edgelet " + newInstance.getCloudletId() + " sent from microELement "
+			LogUtil.info("Shrinked edgelet " + newInstance.getCloudletId() + " sent from microELement "
 					+ findFirst.getId() + " to microELement " + microELement.getId());
 			this.send(getId(), 0, EdgeState.SENDING_TO_EDGE, newInstance);
-
 		}
 	}
 
@@ -119,7 +116,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 	protected void processCloudletReturn(SimEvent ev) {
 		EdgeLet cloudlet = (EdgeLet) ev.getData();
 		this.getCloudletReceivedList().add(cloudlet);
-		Log.printLine(CloudSim.clock() + ": " + getName() + ": Cloudlet " + cloudlet.getCloudletId() + " received");
+		Log.printLine(CloudSim.clock() + ": " + getName() + ": cloudlet " + cloudlet.getCloudletId() + " received");
 		this.cloudletsSubmitted--;
 
 		/*
@@ -136,33 +133,29 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 	}
 
 	private void actuating(SimEvent ev) {
-
 		EdgeLet let = (EdgeLet) ev.getData();
 		ConnectionHeader connectionHeader = let.getConnectionHeader();
 
 		double networkDelay = this.getNetworkDelay(new DevicesInfo(connectionHeader.ioTId, connectionHeader.vmId));
 		boolean availible = this.checkAvailiability(connectionHeader);
 		if (availible) {
-			LogUtil.info(CloudSim.clock() + " the edgelet " + let.getCloudletId() + " has been processed");
+			LogUtil.info(CloudSim.clock() + " The edgelet " + let.getCloudletId() + " has been processed");
 			this.send(connectionHeader.ioTId, networkDelay, EdgeState.REQUEST_ACTUATING, let);
 		} else {
-			LogUtil.info(CloudSim.clock() + " the edgelet " + let.getCloudletId()
-					+ " has been processed but cannot find the ioT device, so try to pass edgelet to a near edge device");
+			LogUtil.info(CloudSim.clock() + " The edgelet " + let.getCloudletId()
+					+ " has been processed but cannot find the IoT device, so try to pass edgelet to a near edge device");
 			Direction direction = connectionHeader.direction;
-			EdgeDevice availiableDevice = this.getNearByEdgeDevice(direction, connectionHeader);
-			// should not enter this step unless there are not available edge devices at
-			// all;
-			if (availiableDevice == null) {
-				LogUtil.info("lost connection with iot " + connectionHeader.ioTId + " when actuating");
+			EdgeDevice availableDevice = this.getNearByEdgeDevice(direction, connectionHeader);
+			// Should not enter this step unless there are not available edge devices at all
+			if (availableDevice == null) {
+				LogUtil.info("Lost connection with IoT " + connectionHeader.ioTId + " when actuating");
 			} else {
-				LogUtil.info("found a near edge " + availiableDevice.getId() + " and give  edgelet "
+				LogUtil.info("Found a near edge " + availableDevice.getId() + " and give edgelet "
 						+ let.getCloudletId() + " to it");
 
-				availiableDevice.addPendingResponse(let);
-
-			
+				availableDevice.addPendingResponse(let);
 			}
-			// send(connectionHeader.ioTId, networkDelay, EdgeState.REQUEST_ACTUATING, let);
+			//send(connectionHeader.ioTId, networkDelay, EdgeState.REQUEST_ACTUATING, let);
 		}
 
 	}
@@ -181,46 +174,44 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 				}
 			}
 		}
-		// theoretically it cannot be null;
+		// Theoretically it cannot be null
 		if (previousDevice == null)
 			return null;
-		EdgeDevice availiableDevice = null;
+		
+		EdgeDevice availableDevice = null;
+
 		for (Host host : hostList) {
-
 			device = (EdgeDevice) host;
-			// left direction
-			if (direction == Direction.LEFT) {
-				// if this device is on the left side of the previous device
-				if (device.getLocation().location.x < previousDevice.getLocation().location.x) {
-					// if there are enabled vm in this edgedevice
-					if (host.getVmList().size() > 0 && device.isEnabled()) {
-						availiableDevice = device;
-					}
 
+			if (direction == Direction.LEFT) {
+				// If this device is on the left side of the previous device
+				if (device.getLocation().location.x < previousDevice.getLocation().location.x) {
+					// If there are enabled VM in this edge device
+					if (host.getVmList().size() > 0 && device.isEnabled()) {
+						availableDevice = device;
+					}
 				}
 			} else if (direction == Direction.RIGHT) {
-				// if this device is on the right side of the previous device
+				// If this device is on the right side of the previous device
 				if (device.getLocation().location.x > previousDevice.getLocation().location.x) {
-					// if there are enabled vm in this edgedevice
+					// If there are enabled VM in this edge device
 					if (host.getVmList().size() > 0 && device.isEnabled()) {
-						availiableDevice = device;
+						availableDevice = device;
 					}
 				}
 			}
-
 		}
 
-		return availiableDevice;
+		return availableDevice;
 	}
 
 	/**
-	 * whenever the cloudlet has been processed by a certain VM in Host the host's
-	 * battery will be updated.
+	 * Whenever the cloudlet has been processed by a certain VM in Host,
+	 * the host's battery will be updated.
 	 *
 	 * @param connectionHeader
 	 */
 	private void updateHostBattery(ConnectionHeader connectionHeader) {
-		
 		EdgeDataCenter entity = (EdgeDataCenter) CloudSim
 				.getEntity(this.getVmsToDatacentersMap().get(connectionHeader.vmId));
 		List<Host> hostList = entity.getHostList();
@@ -231,12 +222,11 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 					EdgeDevice device = (EdgeDevice) host;
 					
 					//(double fileSize, double shrinkFactor,double drangeRateForProcess,double drangeRateForSending)
-					double shrik=0.1;
-					if(vm.getId()==1)
-					device.updateBatteryByProcessingCloudLetAndSend(1000, shrik,0.1,0.6);
+					double shrink = 0.1;
+					if (vm.getId() == 1)
+						device.updateBatteryByProcessingCloudLetAndSend(1000, shrink, 0.1, 0.6);
 					else
-						device.updateBatteryByProcessingCloudLetAndSend2(1000, shrik,0.1,0.6);
-					
+						device.updateBatteryByProcessingCloudLetAndSend2(1000, shrink, 0.1, 0.6);
 				}
 			}
 		}
@@ -258,19 +248,17 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 					//LogUtil.info("connectionInfo.vmId " + connectionInfo.vmId);
 					Location location = device.getLocation().location;
 					Location location2 = entity2.getMobility().location;
-					double singalRange = device.getLocation().signalRange;
+					double signalRange = device.getLocation().signalRange;
 					double distance = Math.abs(location2.x - location.x);
-					if (singalRange >= distance && device.isEnabled())
+					if (signalRange >= distance && device.isEnabled())
 						return true;
-
 				}
 			}
-
 		}
 		if (device != null) {
 			this.send(entity.getId(), 0, EdgeState.LOST_CONNECTION, connectionInfo);
 		}
-		// LogUtil.info("lost connection with ioT "+connectionInfo.ioTId);
+		//LogUtil.info("Lost connection with IoT " + connectionInfo.ioTId);
 		return false;
 	}
 
@@ -285,7 +273,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 		if (this.init)
 			return;
 		this.init = true;
-		LogUtil.info("initialize  network connection");
+		LogUtil.info("Initialize network connection");
 		this.send(this.getId(), 0, EdgeState.INITILIZE_CONNECTION);
 	}
 
@@ -297,22 +285,22 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 		case EdgeState.INITILIZE_CONNECTION:
 			this.setupConnection(ev);
 			break;
+
 		case EdgeState.REQUEST_CONNECTION:
 			this.requestConnection(ev);
-
 			break;
-		case EdgeState.CONNECTING_ACK:
 
+		case EdgeState.CONNECTING_ACK:
 			ConnectionHeader header = (ConnectionHeader) ev.getData();
 			if (header.getSourceType()) {
-				LogUtil.info("broker received  connection ack  from ioT " + header.ioTId);
+				LogUtil.info("Broker received connection ack from IoT " + header.ioTId);
 				this.processConnectionAckFromIoT(ev);
 			} else {
-				LogUtil.info("broker received  connection ack  from vm " + header.vmId);
+				LogUtil.info("Broker received connection ack from VM " + header.vmId);
 				this.processConnectionAckFromEdge(ev);
 			}
-
 			break;
+
 		case EdgeState.REQUEST_DISCONNECTION:
 			DevicesInfo info2 = (DevicesInfo) ev.getData();
 			this.removeConnection(info2);
@@ -320,7 +308,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 
 		case EdgeState.BATTERY_DRAINED:
 			DevicesInfo info3 = (DevicesInfo) ev.getData();
-			LogUtil.info("networkManager: remove iot device " + info3.ioTDeviceId + "'s connection");
+			LogUtil.info("NetworkManager: Remove IoT device " + info3.ioTDeviceId + "'s connection");
 			this.removeConnection(info3);
 			break;
 
@@ -329,42 +317,29 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 			break;
 
 		}
-
 	}
 
 	private void sendingDataToEdge(SimEvent ev) {
-
 		EdgeLet data = (EdgeLet) ev.getData();
 		
-		
-		
-		
 		// added by areeb to fix the problem if the header that is not fixed in sending from ML to ML
-		LogUtil.info("VMiD "+data.getVmId());
-		LogUtil.info("VMiD c "+data.getConnectionHeader().vmId);
+		LogUtil.info("VMiD " + data.getVmId());
+		LogUtil.info("VMiD c " + data.getConnectionHeader().vmId);
 		
-		data.getConnectionHeader().vmId=data.getVmId();
+		data.getConnectionHeader().vmId = data.getVmId();
 		boolean available = this.checkAvailiability(data.getConnectionHeader());
 		
-		
 		if (available) {
-			LogUtil.info(CloudSim.clock() + " broker received edgeLet " + data.getCloudletId() + " from iot "
+			LogUtil.info(CloudSim.clock() + " Broker received edgelet " + data.getCloudletId() + " from IoT "
 					+ data.getConnectionHeader().ioTId + " and send it to VM " + data.getConnectionHeader().vmId);
 			List<EdgeLet> list = new ArrayList<>();
 			list.add(data);
 			this.submitCloudletList(list);
 			this.submitCloudlets(data.getConnectionHeader());
-
-		} 
-		
-		
-
+		}
 		else {
-			
 			LogUtil.info("Not Aval 1");
 			EdgeDevice availableDevice = this.findAvailiableDevice(data.getConnectionHeader());
-			
-			
 			
 			if (availableDevice != null) {
 				// EdgeDataCenter entity = (EdgeDataCenter)
@@ -372,8 +347,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 				// assume that it can get connected
 				// send(entity.getId(),0,EdgeState.REQUEST_CONNECTION,data.getConnectionHeader());
 
-				LogUtil.info("broker received edgeLet " + data.getCloudletId() + " from iot "
-
+				LogUtil.info("Broker received edgelet " + data.getCloudletId() + " from IoT "
 						+ data.getConnectionHeader().ioTId + " and its connection has switched to edge "
 						+ availableDevice.getId());
 
@@ -391,8 +365,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 				this.submitCloudletList(list);
 				this.submitCloudlets(data.getConnectionHeader());
 				return;
-			} 
-			 
+			}
 			else {
 				LogUtil.info("Not Aval 2");
 				EdgeDataCenter entity = (EdgeDataCenter) CloudSim
@@ -406,25 +379,22 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 						allBatteriesEmpty = false;
 						break inner;
 					}
-
 				}
-				LogUtil.info("no available devices");
+				LogUtil.info("No available devices");
 				if (allBatteriesEmpty) {
 					LogUtil.info(
-							"there are no available edge devices in the environment so the simuation will be shutting down");
+							"There are no available edge devices in the environment so the simuation will be shutting down");
 					// CloudSim.abruptallyTerminate();
 					CloudSim.terminateSimulation();
 				}
 			}
 		}
-
 	}
 
 	/**
 	 *
-	 * 1.it will check whether there are pending responses from other edge devices
-	 * 2.after submit the cloudlets to vm, the corresponding edge device's battery
-	 * will be updated.
+	 * 1. It will check whether there are pending responses from other edge devices
+	 * 2. After submit the cloudlets to VM, the corresponding edge device's battery will be updated.
 	 *
 	 * @param connectionHeader
 	 */
@@ -435,8 +405,8 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 	}
 
 	/**
-	 * find the corresponding edgelet in this VM related to this ioT, and send the
-	 * edge let back to the ioT for actuating
+	 * Find the corresponding edgelet in this VM related to this IoT,
+	 * and send the edgelet back to the IoT for actuating
 	 *
 	 * @param connectionHeader
 	 */
@@ -460,8 +430,8 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 						// found
 						if (connectionHeader.ioTId == ioTId) {
 							iterator.remove();
-							LogUtil.info(CloudSim.clock() + " send pending cloudlet " + edgeLet.getCloudletId()
-									+ " from VM " + vmId + " to ioT " + ioTId);
+							LogUtil.info(CloudSim.clock() + " Send pending cloudlet " + edgeLet.getCloudletId()
+									+ " from VM " + vmId + " to IoT " + ioTId);
 							this.send(connectionHeader.ioTId, this.getNetworkDelay(new DevicesInfo(ioTId, vmId)),
 									EdgeState.REQUEST_ACTUATING, edgeLet);
 						}
@@ -470,9 +440,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 					break;
 				}
 			}
-
 		}
-
 	}
 
 	private void requestConnection(SimEvent ev) {
@@ -484,11 +452,9 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 					this.getNetworkDelay(new DevicesInfo(connectionInfo.ioTId, connectionInfo.vmId)),
 					EdgeState.REQUEST_CONNECTION, connectionInfo);
 		} else {
-			// LogUtil.info("ioT device "+connectionInfo.ioTId+" cannot find an
-			// availible edgeDevice");
+			//LogUtil.info("IoT device " + connectionInfo.ioTId + " cannot find an available edge device");
 			this.send(connectionInfo.ioTId, 0, EdgeState.NO_AVAILIBLE_DEVICE, connectionInfo);
 		}
-
 	}
 
 	/**
@@ -502,7 +468,6 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 				this.connectionInfos.remove(header2);
 				break;
 			}
-
 		}
 		if (this.connectionInfos.isEmpty()) {
 			LogUtil.info("all sensors are offline");
@@ -514,17 +479,15 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 	private void processConnectionAckFromEdge(SimEvent ev) {
 		ConnectionHeader connectionInfo = (ConnectionHeader) ev.getData();
 		if (connectionInfo.state == EdgeState.SUCCESS) {
-
-			LogUtil.info("send ack to ioT " + connectionInfo.ioTId
+			LogUtil.info("Send ack to IoT " + connectionInfo.ioTId
 					+ " that the connection has been successfully established");
 			this.send(connectionInfo.ioTId,
 					this.getNetworkDelay(new DevicesInfo(connectionInfo.ioTId, connectionInfo.vmId)),
 					EdgeState.CONNECTION_ESTABLISHED, connectionInfo);
 		} else {
 			LogUtil.info(
-					"vm " + connectionInfo.vmId + " doesn't accept this connection from ioT " + connectionInfo.ioTId);
+					"VM" + connectionInfo.vmId + " doesn't accept this connection from IoT " + connectionInfo.ioTId);
 		}
-
 	}
 
 	private void processConnectionAckFromIoT(SimEvent ev) {
@@ -535,9 +498,8 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 					this.getNetworkDelay(new DevicesInfo(connectionInfo.ioTId, connectionInfo.vmId)),
 					EdgeState.REQUEST_CONNECTION, connectionInfo);
 		} else {
-			LogUtil.info("connection failure from ioT " + connectionInfo.ioTId);
+			LogUtil.info("Connection failure from IoT " + connectionInfo.ioTId);
 		}
-
 	}
 
 	private void setupConnection(SimEvent ev) {
@@ -545,7 +507,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 		for (ConnectionHeader connectionInfo : connectionInfos2) {
 			// request iot connection
 			if (!Log.isDisabled()) {
-				LogUtil.info("request connection with ioT " + connectionInfo.ioTId);
+				LogUtil.info("Request connection with IoT " + connectionInfo.ioTId);
 			}
 			EdgeDevice device = this.findAvailiableDevice(connectionInfo);
 			if (device != null) {
@@ -553,14 +515,10 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 						this.getNetworkDelay(new DevicesInfo(connectionInfo.ioTId, connectionInfo.vmId)),
 						EdgeState.REQUEST_CONNECTION, connectionInfo);
 			} else {
-				// LogUtil.info("ioT device "+connectionInfo.ioTId+" cannot find an
-				// availible edgeDevice");
+				//LogUtil.info("IoT device " + connectionInfo.ioTId + " cannot find an available edge device");
 				this.send(connectionInfo.ioTId, 0, EdgeState.NO_AVAILIBLE_DEVICE, connectionInfo);
-
 			}
-
-		} 
-
+		}
 	}
 
 	EdgeDataCenter edgeDatacenter = null;
@@ -596,7 +554,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 					double range = device.getLocation().signalRange;
 					double distance = Math.abs(iotLocation.x - edgeLocation.x);
 					if (range >= distance && device.isEnabled()) {
-						LogUtil.info("got the required device!");
+						LogUtil.info("Got the required device!");
 						return device;
 					}
 					break fo;
@@ -613,16 +571,15 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 			double distance = Math.abs(ioTLocation.x - edgeLocation.x);
 			if (range >= distance) {
 				if (edgeDevice.getAvailability()) {
-					LogUtil.info("got the desired device!");
+					LogUtil.info("Got the desired device!");
 					// TODO send connection request to host
 					connectionInfo.vmId = host.getVmList().get(0).getId();
 					iotDevice.setAttachedEdgeDeviceVMId(host.getVmList().get(0).getId());
 					return edgeDevice;
 				}
-
 			}
 		}
-		LogUtil.info("no device availiable for iot " + connectionInfo.ioTId);
+		LogUtil.info("No device available for IoT " + connectionInfo.ioTId);
 		return null;
 	}
 
@@ -655,13 +612,10 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 		 *
 		 * default: break; }
 		 */
-
 	}
 
 	public void submitConnection(List<ConnectionHeader> connectionInfos) {
-
 		this.getConnectionInfos().addAll(connectionInfos);
-
 	}
 
 }

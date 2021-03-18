@@ -200,7 +200,6 @@ public class EdgeDeviceCreation extends Application {
 		});
 		grid.add(btn, 3, 13);
 		grid.add(btn2, 2, 13);
-
 	}
 
 	protected double getDoubleValue(String text) {
@@ -211,7 +210,6 @@ public class EdgeDeviceCreation extends Application {
 
 		}
 		return parseDouble;
-
 	}
 
 	protected int getIntValue(String text) {
@@ -222,7 +220,6 @@ public class EdgeDeviceCreation extends Application {
 
 		}
 		return parseDouble;
-
 	}
 
 	private TextField addInputWithTextReminder(GridPane grid, String textReminder, int col, int row) {
@@ -232,7 +229,6 @@ public class EdgeDeviceCreation extends Application {
 
 		grid.add(textField, col + 1, row);
 		return textField;
-
 	}
 
 }

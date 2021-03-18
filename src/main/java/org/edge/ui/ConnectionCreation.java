@@ -95,6 +95,5 @@ public class ConnectionCreation extends Application {
 		
 		primaryStage.show();
 	}
-
 	
 }

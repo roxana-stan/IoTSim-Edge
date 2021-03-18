@@ -41,6 +41,7 @@ public abstract class IoTDevice extends SimEntity {
 	 */
 	private int brokerId;
 	private int assigmentIoTId;
+
 	public NetworkDelayCalculationPolicy getNetworkDelayCalculationPolicy() {
 		return this.networkDelayCalculationPolicy;
 	}
@@ -50,6 +51,7 @@ public abstract class IoTDevice extends SimEntity {
 	}
 
 	private NetworkDelayCalculationPolicy networkDelayCalculationPolicy;
+
 	public int getAssigmentIoTId() {
 		return this.assigmentIoTId;
 	}
@@ -72,13 +74,9 @@ public abstract class IoTDevice extends SimEntity {
 		this.runningTime = runningTime;
 	}
 
-	private Mobility mobility;
-
 	public Mobility getMobility() {
 		return this.mobility;
 	}
-
-	private IoTType ioTType;
 
 	public void setMobility(Mobility location) {
 		this.mobility = location;
@@ -92,7 +90,10 @@ public abstract class IoTDevice extends SimEntity {
 	private List<EdgeLet> storedPackages;
 	private List<EdgeLet> dataPackagesUnderTransmission;
 
+	private IoTType ioTType;
+	private Mobility mobility;
 	private boolean isMoving = false;
+	private MovingPolicy movingPolicy;
 	private Battery battery;
 
 	public Battery getBattery() {
@@ -103,10 +104,10 @@ public abstract class IoTDevice extends SimEntity {
 	protected double send_data_size;
 	protected double battery_drainage_rate;
 	private int attachedEdgeDeviceVMId;
+	
 	public void setAttachedEdgeDeviceVMId(int attachedEdgeDeviceVMId) {
 		this.attachedEdgeDeviceVMId = attachedEdgeDeviceVMId;
 	}
-	private MovingPolicy movingPolicy;
 
 	public MovingPolicy getMovingPolicy() {
 		return this.movingPolicy;
@@ -151,16 +152,14 @@ public abstract class IoTDevice extends SimEntity {
 		this.dataPackagesUnderTransmission = new ArrayList<>();
 		this.enabled = true;
 		this.capacityToStore = 0;
-
 	}
 
 	public IoTDevice(IoTType type, String name, double data_frequency, double dataGenerationTime,
 			int complexityOfDataPackage, int dataSize, NetworkModel networkModel, double max_battery_capacity,
 			double battery_drainage_rate, double processingAbility, long capacityToStore, double transfer_frequency,
 			EdgeLet dataTemplate) {
-
 		this(type, name, data_frequency, dataGenerationTime, complexityOfDataPackage, dataSize, networkModel,
-				max_battery_capacity, battery_drainage_rate, processingAbility, dataTemplate);
+			max_battery_capacity, battery_drainage_rate, processingAbility, dataTemplate);
 		this.transfer_frequency = transfer_frequency;
 		this.timeRemainingTosendData = transfer_frequency;
 		this.capacityToStore = capacityToStore;
@@ -209,7 +208,6 @@ public abstract class IoTDevice extends SimEntity {
 	}
 
 	public void setEnabled(boolean enabled) {
-
 		this.enabled = enabled;
 	}
 
@@ -219,7 +217,7 @@ public abstract class IoTDevice extends SimEntity {
 	 * @return
 	 */
 	private void generateData() {
-		//		LogUtil.info("iot " + getId() + " is generating data");
+		//LogUtil.info("IoT " + getId() + " is generating data");
 		this.schedule(this.getId(), this.dataGenerationTime, EdgeState.GENERATING);
 	}
 
@@ -237,7 +235,6 @@ public abstract class IoTDevice extends SimEntity {
 		sendingPackage.addAll(dataPackages);
 
 		this.send(this.attachedEdgeDeviceVMId, this.getNetworkDelay(), EdgeState.SENDING_TO_EDGE, sendingPackage);
-
 	}
 
 	/**
@@ -271,19 +268,18 @@ public abstract class IoTDevice extends SimEntity {
 	 * @param dataPackage
 	 */
 	private void sending(EdgeLet dataPackage) {
-		LogUtil.info(CloudSim.clock()+ " "+this.getClass().getSimpleName()+" " + this.getId() + " is sending data");
+		LogUtil.info(CloudSim.clock() + " " + this.getClass().getSimpleName() + " " + this.getId() + " is sending data");
 		ConnectionHeader connectionHeader = new ConnectionHeader(this.attachedEdgeDeviceVMId, this.getId(), this.brokerId,
 				this.getNetworkModel().getCommunicationProtocol().getClass());
-		if(this.getMobility().movable) {
-			connectionHeader.direction=this.getMobility().volecity>0?Direction.RIGHT:Direction.LEFT;
-			
+		if (this.getMobility().movable) {
+			connectionHeader.direction = this.getMobility().volecity > 0 ? Direction.RIGHT : Direction.LEFT;
 		}
 		dataPackage.setConnectionHeader(connectionHeader);
 //		double speed = this.getTransmissionSpeed();
 
 		this.send(this.brokerId, this.getNetworkDelay(), EdgeState.SENDING_TO_EDGE, dataPackage);
 		this.dataPackagesSent.add(dataPackage);
-		this.send(this.getId(),this.data_frequency , EdgeState.SENSING);
+		this.send(this.getId(), this.data_frequency, EdgeState.SENSING);
 	}
 
 	public abstract double getNetworkDelay();
@@ -292,9 +288,9 @@ public abstract class IoTDevice extends SimEntity {
 		// if the battery is drained,
 		if (this.updateBatteryByTransmission(this.battery)) {
 			this.runningTime = CloudSim.clock();
-			LogUtil.info(this.getClass().getSimpleName()+" "+this.getId()+"'s battery has ran out when transmitting");
-			if(this.getMobility().movable) {
-				LogUtil.info("and it has moved "+this.mobility.totalMovingDistance+ " units");
+			LogUtil.info(this.getClass().getSimpleName() + " " + this.getId() + "'s battery has ran out when transmitting");
+			if (this.getMobility().movable) {
+				LogUtil.info("and it has moved " + this.mobility.totalMovingDistance + " units");
 			}
 			this.setEnabled(false);
 			return false;
@@ -302,7 +298,7 @@ public abstract class IoTDevice extends SimEntity {
 
 		if (this.attachedEdgeDeviceVMId == -1) {
 			this.setEnabled(false);
-			LogUtil.info("there is no target edge device connected to this loT: " + this.getId());
+			LogUtil.info("there is no target edge device connected to this IoT: " + this.getId());
 			return false;
 		}
 		return true;
@@ -311,7 +307,7 @@ public abstract class IoTDevice extends SimEntity {
 	@Override
 	public void startEntity() {
 		this.isMoving = true;
-		// plus 10 make sure eveything has started
+		// plus 10 make sure everything has started
 		this.send(this.getId(), MOVE_INTERVAL + 2, EdgeState.MOVING);
 	}
 
@@ -324,7 +320,7 @@ public abstract class IoTDevice extends SimEntity {
 	public abstract double getTransmissionSpeed();
 
 	public void process_data(EdgeLet generated_data) {
-		//		LogUtil.info("iot " + getId() + " is processing data");
+		//LogUtil.info("IoT " + getId() + " is processing data");
 		EdgeLet processedData = this.processData(generated_data);
 		this.schedule(this.getId(), 0, EdgeState.PROCESS_COMPLETED, processedData);
 	}
@@ -352,15 +348,14 @@ public abstract class IoTDevice extends SimEntity {
 	}
 
 	protected void updateGeolocation() {
-
-		if(this.movingPolicy!=null) {
+		if (this.movingPolicy!=null) {
 			//this.getMobility().location.x=this.getMobility().location.x+this.getMobility().volecity;
-			LogUtil.info(this.getClass().getSimpleName()+" " + this.getId() +" Location is:"+this.getMobility().location.x);
+			LogUtil.info(this.getClass().getSimpleName() + " " + this.getId() + " Location is:" + this.getMobility().location.x);
 			this.movingPolicy.updateLocation(this.getMobility());
-		}else {
+		} else {
 			this.movingPolicy=new SimpleMovingPolicy();
 			//this.getMobility().location.x=this.getMobility().location.x+this.getMobility().volecity;
-			LogUtil.info(this.getClass().getSimpleName()+" " + this.getId() +" Location is:"+this.getMobility().location.x);
+			LogUtil.info(this.getClass().getSimpleName() + " " + this.getId() + " Location is:" + this.getMobility().location.x);
 			this.movingPolicy.updateLocation(this.mobility);
 		}
 	}
@@ -373,14 +368,14 @@ public abstract class IoTDevice extends SimEntity {
 		case EdgeState.REQUEST_DISCONNECTION:
 			this.attachedEdgeDeviceVMId = -1;
 			this.setEnabled(false);
-			LogUtil.info(this.getClass().getSimpleName()+" " + this.getId() + " gets disconnected with edge device " + this.attachedEdgeDeviceVMId);
+			LogUtil.info(this.getClass().getSimpleName() + " " + this.getId() + " gets disconnected with edge device " + this.attachedEdgeDeviceVMId);
 			if (ev.getData() != null && ev.getData() instanceof String) {
 				String data = (String) ev.getData();
 				LogUtil.info(data);
 			}
 			break;
-		case EdgeState.REQUEST_CONNECTION:
 
+		case EdgeState.REQUEST_CONNECTION:
 			ConnectionHeader info = (ConnectionHeader) ev.getData();
 			LogUtil.info("received request for connection from broker" + info.brokeId);
 			info.sourceId = info.ioTId;
@@ -393,52 +388,49 @@ public abstract class IoTDevice extends SimEntity {
 				info.state = EdgeState.FAILURE;
 				this.send(info.brokeId, this.getNetworkDelay(), EdgeState.CONNECTING_ACK, info);
 			}
-
 			break;
-		case EdgeState.CONNECTION_ESTABLISHED:
 
+		case EdgeState.CONNECTION_ESTABLISHED:
 			ConnectionHeader info2 = (ConnectionHeader) ev.getData();
 			this.attachedEdgeDeviceVMId = info2.vmId;
-			LogUtil.info(CloudSim.clock()+ " "+
-					this.getClass().getSimpleName()+" " + this.getId() + " has established connection with vm " + info2.vmId + " and start to sense");
+			LogUtil.info(CloudSim.clock() + " " +
+					this.getClass().getSimpleName() + " " + this.getId() + " has established connection with VM " + info2.vmId + " and start to sense");
 			this.setEnabled(true);
 			this.send(this.getId(), this.data_frequency, EdgeState.SENSING);
 			break;
+
 		case EdgeState.DISCONNECTED:
 			Object data = ev.getData();
-			if(data instanceof String) {
-				String result=(String) data;
-				if(result.equals(EdgeState.UNSUPPORTED_COMMUNICATION_PROTOCOL) || result.equals(EdgeState.UNSUPPORTED_IOT_DEVICE)) {
+			if (data instanceof String) {
+				String result = (String) data;
+				if (result.equals(EdgeState.UNSUPPORTED_COMMUNICATION_PROTOCOL) || result.equals(EdgeState.UNSUPPORTED_IOT_DEVICE)) {
 					shutDownDevice();
 				}
-
-			}else {
+			} else {
 				this.attachedEdgeDeviceVMId = NULL_DEVICE;
 				this.setEnabled(false);
 			}
 			break;
 
 		case EdgeState.SENSING:
-			//			LogUtil.info("ioT " + getId() + " start to sense");
+			//LogUtil.info("IoT " + getId() + " start to sense");
 			this.sensing();
 			break;
+
 		case EdgeState.GENERATING:
 			EdgeLet edgeLet = this.generateEdgeLet();
-
 			this.process_data(edgeLet);
 			break;
+
 		case EdgeState.PROCESS_COMPLETED:
-
 			EdgeLet processedData = (EdgeLet) ev.getData();
-
 			this.sendData(processedData);
-
 			break;
+
 		case EdgeState.SENDING_TO_EDGE:
-
 			break;
-		case EdgeState.REQUEST_ACTUATING:
 
+		case EdgeState.REQUEST_ACTUATING:
 			this.actuating(ev);
 			break;
 
@@ -450,30 +442,27 @@ public abstract class IoTDevice extends SimEntity {
 			break;
 
 		case EdgeState.MOVING:
-
 			if (this.attachedEdgeDeviceVMId == NULL_DEVICE) {
-				ConnectionHeader connectionHeader2 =new ConnectionHeader(attachedEdgeDeviceVMId,getId(),brokerId,getNetworkModel().getCommunicationProtocol().getClass());
+				ConnectionHeader connectionHeader2 = new ConnectionHeader(attachedEdgeDeviceVMId,getId(), brokerId, getNetworkModel().getCommunicationProtocol().getClass());
 				connectionHeader2.brokeId=brokerId;
 				connectionHeader2.ioTId=getId();
 
 				this.send(this.brokerId, 0, EdgeState.REQUEST_CONNECTION, connectionHeader2);
 			}
-			if(!this.getMobility().movable)
-				return ;
+			if (!this.getMobility().movable)
+				return;
 			if (this.updateBatteryByMoving())
 				return;
 			this.updateGeolocation();
 			this.send(this.getId(), MOVE_INTERVAL, EdgeState.MOVING, ev.getData());
 			break;
 		}
-
 	}
 
 	private void shutDownDevice() {
-		LogUtil.info("iot "+getId()+ " is shuting down");
+		LogUtil.info("IoT " + getId() + " is shuting down");
 		getBattery().setCurrentCapacity(0);
 		setEnabled(false);
-
 	}
 
 	private boolean updateBatteryByMoving() {
@@ -485,7 +474,6 @@ public abstract class IoTDevice extends SimEntity {
 	}
 
 	private EdgeLet generateEdgeLet() {
-
 		EdgeLet newInstance = this.dataTemplate.newInstance(cloudLetId);
 		newInstance.setUserId(this.brokerId);
 		// LogUtil.info(attachedEdgeDeviceVMId);
@@ -495,7 +483,6 @@ public abstract class IoTDevice extends SimEntity {
 	}
 
 	private void sensing() {
-
 		// if the battery is drained,
 		boolean died = this.updateBatteryBySensing(this.battery);
 		if (died) {
@@ -509,7 +496,6 @@ public abstract class IoTDevice extends SimEntity {
 		}
 
 		this.generateData();
-
 	}
 
 	public abstract boolean updateBatteryBySensing(Battery battery);
@@ -539,23 +525,22 @@ public abstract class IoTDevice extends SimEntity {
 		if (updateBatteryByActuating) {
 			this.setEnabled(false);
 			this.schedule(this.brokerId, 0, EdgeState.BATTERY_DRAINED, new DevicesInfo(this.getId(), this.attachedEdgeDeviceVMId));
-			LogUtil.info(this.getClass().getSimpleName() +" "+this.getId()+ " running time： " + CloudSim.clock());
+			LogUtil.info(this.getClass().getSimpleName() + " " + this.getId() + " running time： " + CloudSim.clock());
 		} else {
-			if(isEnabled()) {
+			if (isEnabled()) {
 				EdgeLet edgeLet = (EdgeLet) ev.getData();
-				LogUtil.info("Insied IoT "+this.assigmentIoTId +"EdgeLet"+edgeLet.getCloudletId() +"edgeLet lenght"+ edgeLet.getCloudletLength());
-				LogUtil.info(CloudSim.clock()+ " "+this.getClass().getSimpleName()+" "+this.getId()+" received processed edgelet "+edgeLet.getCloudletId()+" from vm "+edgeLet.getVmId()  + " and start actuating");
-			}else {
-				if(!logPrinted) {
-					LogUtil.info(CloudSim.clock()+" "+this.getClass().getSimpleName()+" "+this.getId()+"  has offline");
+				LogUtil.info("Inside IoT " + this.assigmentIoTId + "edgelet" + edgeLet.getCloudletId() + "edgelet length" + edgeLet.getCloudletLength());
+				LogUtil.info(CloudSim.clock() + " " + this.getClass().getSimpleName() + " " + this.getId()
+							+ " received processed edgelet " + edgeLet.getCloudletId() + " from VM " + edgeLet.getVmId() + " and start actuating");
+			} else {
+				if (!logPrinted) {
+					LogUtil.info(CloudSim.clock() + " " + this.getClass().getSimpleName()+ " " + this.getId() + " has offline");
 					logPrinted=true;
 				}
-
 			}
 
 			//			send(getId(), data_frequency, EdgeState.SENSING);
 		}
-
 	}
 
 }

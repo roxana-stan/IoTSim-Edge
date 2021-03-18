@@ -65,8 +65,6 @@ public class VoiceSensor extends IoTDevice {
 		return false;
 	}
 
-
-
 	@Override
 	public boolean updateBatteryBySensing(Battery battery) {
 		battery.setCurrentCapacity(battery.getCurrentCapacity()-battery_drainage_rate);

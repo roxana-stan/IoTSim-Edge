@@ -42,6 +42,5 @@ public interface CommunicationProtocol {
 
     public float getBatteryDrainageRate();
     public float getTransmissionSpeed();
-    
 
 }

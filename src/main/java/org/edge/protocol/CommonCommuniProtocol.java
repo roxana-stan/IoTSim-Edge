@@ -9,8 +9,6 @@ import org.edge.protocol.attribute.TransportProtocol;
 
 public  abstract class CommonCommuniProtocol implements CommunicationProtocol {
 
-   
-	
     public CommonCommuniProtocol(int runningPort, TransportProtocol[] transportPortProtocol,
 			SecurityProtocol[] securityProtocol, int headSize, long maxMessageSize, Architecture[] architecture,
 			String encoding, String name, Synchronism[] synchronism, QoS[] qos,
@@ -29,7 +27,6 @@ public  abstract class CommonCommuniProtocol implements CommunicationProtocol {
 		this.batteryConsumptionSpeed = batteryConsumptionSpeed;
 		this.transmissionSpeed = transmissionSpeed;
 	}
-
 
 	public CommonCommuniProtocol(int runningPort, TransportProtocol[] transportPortProtocol,
 			SecurityProtocol[] securityProtocol, int headSize, long maxMessageSize, Architecture[] architecture,
@@ -61,8 +58,6 @@ public  abstract class CommonCommuniProtocol implements CommunicationProtocol {
     protected QoS[] qos;
     protected float batteryConsumptionSpeed;
     protected float transmissionSpeed;
-    
-
 
 /*
     public void CommonCommuniProtocol(void all  parameters except encoding) {
@@ -73,12 +68,11 @@ public  abstract class CommonCommuniProtocol implements CommunicationProtocol {
         // TODO implement here
     }
 */
+    
     public TransportProtocol[] getSupportedTransPortProtocol() {
         // TODO implement here
         return transportPortProtocol;
     }
-
-  
 
     public Architecture[] getSupportedArchitecture() {
         // TODO implement here
@@ -89,9 +83,6 @@ public  abstract class CommonCommuniProtocol implements CommunicationProtocol {
         // TODO implement here
         return "utf-8";
     }
-
-   
-
 
 	@Override
 	public SecurityProtocol[] getSupportedSecurityProtocol() {
@@ -118,11 +109,9 @@ public  abstract class CommonCommuniProtocol implements CommunicationProtocol {
 	public long getMaxMessageSize() {
 		return maxMessageSize;
 	}
-
 	
 	@Override
 	public String getProtocolName() {
-
 		return this.getClass().getSimpleName().substring(0,this.getClass().getSimpleName().lastIndexOf('P'));
 	}
 
@@ -140,7 +129,5 @@ public  abstract class CommonCommuniProtocol implements CommunicationProtocol {
 	public QoS[] getSupportedQoS() {
 		return qos;
 	}
-
-  
 
 }

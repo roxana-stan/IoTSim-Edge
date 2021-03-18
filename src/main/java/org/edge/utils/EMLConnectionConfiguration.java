@@ -11,5 +11,4 @@ public @interface EMLConnectionConfiguration {
 
 	String value() default "";
 
-	
 }

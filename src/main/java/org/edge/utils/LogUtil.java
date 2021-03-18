@@ -24,29 +24,27 @@ public class LogUtil {
 		public void setValue(String value) {
 			this.value = value;
 		}
-
 	}
 
 	private static Level level = Level.DEBUG;
 	private static String path;
 	private static boolean saveLogToFile;
 	private static BufferedWriter bufferedWriter;
-	private static boolean append=true;
-	public static  void initLog(Level level,String path,boolean saveLogToFile,boolean append) {
-		LogUtil.append=append;
-		initLog(level, path, saveLogToFile);
+	private static boolean append = true;
 	
+	public static void initLog(Level level, String path, boolean saveLogToFile, boolean append) {
+		LogUtil.append = append;
+		initLog(level, path, saveLogToFile);
 	}
 	/**
 	 * must be called in initialization part if needing to write log into file
 	 */
 	
-	public static  void initLog(Level level,String path,boolean saveLogToFile) {
-	
-		LogUtil.path=path;
-		LogUtil.saveLogToFile=saveLogToFile;
-		LogUtil.level=level;
-		if(saveLogToFile) {
+	public static void initLog(Level level, String path, boolean saveLogToFile) {
+		LogUtil.path = path;
+		LogUtil.saveLogToFile = saveLogToFile;
+		LogUtil.level = level;
+		if (saveLogToFile) {
 			FileWriter fileWriter;
 			try {
 				fileWriter = new FileWriter(path, append);
@@ -64,23 +62,21 @@ public class LogUtil {
 			if (saveLogToFile) {
 				appendTextToFile(msg);
 			}
-
-		}
-
-	}
-
-public static void simulationFinished() {
-	if(saveLogToFile && bufferedWriter!=null) {
-		try {
-			bufferedWriter.flush();
-			bufferedWriter.close();		
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
-	
-}
+
+	public static void simulationFinished() {
+		if (saveLogToFile && bufferedWriter != null) {
+			try {
+				bufferedWriter.flush();
+				bufferedWriter.close();		
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public static void appendTextToFile(String text) {
 		try {
 			bufferedWriter.write(text);
@@ -88,7 +84,6 @@ public static void simulationFinished() {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

@@ -215,7 +215,6 @@ public class IoTCreation extends Application {
 		});
 		grid.add(btn, 1, 14);
 		grid.add(btn2, 0, 14);
-
 	}
 
 	protected double getDoubleValue(String text) {
@@ -226,7 +225,6 @@ public class IoTCreation extends Application {
 
 		}
 		return parseDouble;
-
 	}
 
 	protected int getIntValue(String text) {
@@ -237,7 +235,6 @@ public class IoTCreation extends Application {
 
 		}
 		return parseDouble;
-
 	}
 
 	private TextField addInputWithTextReminder(GridPane grid, String textReminder, int col, int row) {

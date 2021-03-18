@@ -127,7 +127,6 @@ public class VMCreation extends  Application{
 		});
 		grid.add(btn, 1,8);
 		grid.add(btn2, 0,8);
-
 	}
 
 	protected double getDoubleValue(String text) {
@@ -138,8 +137,8 @@ public class VMCreation extends  Application{
 
 		}
 		return parseDouble;
-
 	}
+
 	protected int getIntValue(String text) {
 		int parseDouble = 1;
 		try {
@@ -148,7 +147,6 @@ public class VMCreation extends  Application{
 
 		}
 		return parseDouble;
-
 	}
 
 	private TextField addInputWithTextReminder(GridPane grid, String textReminder, int col, int row) {
@@ -158,9 +156,6 @@ public class VMCreation extends  Application{
 
 		grid.add(textField, col + 1, row);
 		return textField;
-
 	}
-
-	
 	
 }

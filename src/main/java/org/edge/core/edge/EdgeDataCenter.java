@@ -17,8 +17,7 @@ import org.edge.utils.LogUtil;
 
 
 /**
- * this is edge data center extended from Datacenter
- * in this Datacenter, it has got its own edgeDatacenterCharacteristics
+ * This is EdgeDataCenter extended from Datacenter, having its own EdgeDatacenterCharacteristics.
  * @author cody
  *
  */
@@ -44,12 +43,9 @@ public class EdgeDataCenter extends Datacenter {
 	@Override
 	public void processEvent(SimEvent ev) {
 		// TODO Auto-generated method stub
-
 		super.processEvent(ev);
-	
-
-
 	}
+	
 	@Override
 	public void processOtherEvent(SimEvent ev) {
 		// TODO Auto-generated method stub
@@ -57,16 +53,13 @@ public class EdgeDataCenter extends Datacenter {
 		switch (tag) {
 		case EdgeState.REQUEST_CONNECTION:
 			this.processConnectionRequest(ev);
-
 			break;
 		case EdgeState.LOST_CONNECTION:
 			this.processConnectionLost(ev);
 			break;
-
 		default:
 			break;
 		}
-
 	}
 
 	private void processConnectionLost(SimEvent ev) {
@@ -76,14 +69,14 @@ public class EdgeDataCenter extends Datacenter {
 			List<Vm> vmList2 = host.getVmList();
 			for (Vm vm : vmList2) {
 				if (vm.getId() == connectionInfo.vmId) {
-					EdgeDevice device=(EdgeDevice) host;
+					EdgeDevice device = (EdgeDevice) host;
 					device.removeConnection(connectionInfo);
 					break;
 				}
 			}
 		}
-
 	}
+
 	/**
 	 * set up connection between edge devices in this data center and iot devices
 	 * @param ev its data contains connection information between edge device and iot device
@@ -122,7 +115,6 @@ public class EdgeDataCenter extends Datacenter {
 									return;
 								}
 							}
-
 						}
 						return;
 

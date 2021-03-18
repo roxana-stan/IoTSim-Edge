@@ -11,14 +11,15 @@ import org.edge.protocol.CommunicationProtocol;
 public class NetworkModel {
 
     private NetworkType networkType;
+    private CommunicationProtocol communicationProtocol;
     
-
-
 	public NetworkModel(NetworkType networkType) {
 		this.networkType = networkType;
     }
-
-  
+	
+	public NetworkType getNetWorkType() {
+        return networkType;
+    }
 
 	public void setNetworkType(NetworkType networkType) {
 		this.networkType = networkType;
@@ -28,18 +29,8 @@ public class NetworkModel {
 		return communicationProtocol;
 	}
 
-
-
 	public void setCommunicationProtocol(CommunicationProtocol communicationProtocol) {
 		this.communicationProtocol = communicationProtocol;
 	}
-
-	private CommunicationProtocol communicationProtocol;
-
-
-
-    public NetworkType getNetWorkType() {
-        return networkType;
-    }
 
 }

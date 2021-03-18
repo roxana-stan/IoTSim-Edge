@@ -4,7 +4,6 @@ public class Mobility {
 
 	public boolean movable;
 
-
 	public double volecity;
 
 	public double totalMovingDistance;
@@ -16,12 +15,10 @@ public class Mobility {
 
 	public Mobility(Location location) {
 		super();
-		this.location=new Location(location.x,location.y,location.z);
-
+		this.location = new Location(location.x, location.y, location.z);
 	}
 
-
-	public static class MovingRange{
+	public static class MovingRange {
 		public int beginX;
 		public int endX;
 
@@ -34,11 +31,9 @@ public class Mobility {
 			this.beginX = beginX;
 			this.endX = endX;
 		}
-
 	}
 
-
-	public static class Location{
+	public static class Location {
 		public double x;
 		public double y;
 		public double z;
@@ -47,11 +42,7 @@ public class Mobility {
 			this.x = x;
 			this.y = y;
 			this.z = z;
-
 		}
-
-
 	}
-
 
 }

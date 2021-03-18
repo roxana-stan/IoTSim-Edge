@@ -11,5 +11,4 @@ public @interface Configuration {
 
 	String value() default "";
 
-	
 }

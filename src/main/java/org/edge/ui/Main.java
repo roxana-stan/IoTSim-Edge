@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 
 public class Main  extends Application{
 	
-	
 	private Stage primaryStage;
 
 	public static void main(String[] args) {
@@ -40,8 +39,6 @@ public class Main  extends Application{
 
     	Scene scene = new Scene(grid, 600,300);
     	
-    	
-
   
 
     	CheckBox box=new CheckBox("trace");
@@ -100,7 +97,7 @@ public class Main  extends Application{
 			public void handle(ActionEvent event) {
 				try {
 					String numberOfUser = numberUser.getText();
-					UIEntity entity=new UIEntity();
+					UIEntity entity = new UIEntity();
 					entity.setNumberOfUser(Integer.parseInt(numberOfUser));
 					entity.setNumberOfDataCenter(Integer.parseInt(datacenter.getText()));
 					entity.setNumberOfIotDevice(Integer.parseInt(iotDevices.getText()));
@@ -108,7 +105,7 @@ public class Main  extends Application{
 					entity.setBrokerName(brokerName.getText());
 					entity.setNumberOfVms(Integer.parseInt(numberOfVMs.getText()));
 					entity.setTrace(box.isSelected());
-					BrokerEntity broker=new BrokerEntity();
+					BrokerEntity broker = new BrokerEntity();
 					broker.setName(entity.getBrokerName());
 					ConfiguationEntity configuationEntity=new ConfiguationEntity();
 					configuationEntity.setBroker(broker);
@@ -135,14 +132,13 @@ public class Main  extends Application{
         primaryStage.show();
 	}
 
-	private TextField addInputWithTextReminder(GridPane grid, String textReminder,int col,int row) {
+	private TextField addInputWithTextReminder(GridPane grid, String textReminder, int col, int row) {
 		Label userName = new Label(textReminder);
     	grid.add(userName, col, row);
     	TextField textField = new TextField();
     	
     	grid.add(textField, col+1, row);
     	return textField;
-    	
 	}
 	
 }

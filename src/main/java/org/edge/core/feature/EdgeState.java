@@ -1,12 +1,6 @@
 package org.edge.core.feature;
 
 public class EdgeState {
-	/**
-
-	 *
-	 *
-	 *
-	 */
 	public static final int BASE=111;
 	public static final int REQUEST_CONNECTION = BASE+1;
 	public static final int REQUEST_DISCONNECTION = BASE+2;
@@ -21,7 +15,6 @@ public class EdgeState {
 
 	public static final int SENSING = BASE+7;
 	public static final int WAIT_TO_SENSE = BASE+8;
-
 
 
 	public static final int GENERATING = BASE+9;
@@ -53,6 +46,6 @@ public class EdgeState {
 	public static final int NO_AVAILIBLE_DEVICE = BASE+27;
 	public static final int LOST_CONNECTION = BASE+28;
 
-	public static final String UNSUPPORTED_IOT_DEVICE="unsupported_iot_device";
+	public static final String UNSUPPORTED_IOT_DEVICE = "unsupported_iot_device";
 	public static final String UNSUPPORTED_COMMUNICATION_PROTOCOL = "unsupported_communication_protocol";
 }

@@ -29,25 +29,21 @@ public class ConfiguationEntity {
 
 	@Data
 	public static class EdgeDataCenterEntity {
-
 		private String name;
 		private EdgeDatacenterCharacteristicsEntity characteristics;
 		private VmAllcationPolicyEntity vmAllocationPolicy;
 		// List<StorageEntity> storageList;
 		private double schedulingInterval;
-
 	}
 
 	@Data
 	public static class VmAllcationPolicyEntity {
-
 		String className;
 		List<HostEntity> hostEntities;
 	}
 
 	@Data
 	public static class HostEntity {
-
 		int id;
 		RamProvisionerEntity ramProvisioner;
 		BwProvisionerEntity bwProvisioner;
@@ -66,35 +62,27 @@ public class ConfiguationEntity {
 		double max_battery_capacity;
 		double battery_drainage_rate;
 		double current_battery_capacity;
-
 	}
 
 	@Data
 	public static class RamProvisionerEntity {
-
 		String className;
 		int ramSize;
-
 	}
 
 	@Data
 	public static class BwProvisionerEntity {
-
 		String className;
 		int bwSize;
-
 	}
 
 	@Data
 	public static class VmSchedulerEntity {
-
 		String className;
-
 	}
 
 	@Data
 	public static class PeEntity {
-
 		int id;
 		String peProvisionerClassName;
 		int mips;
@@ -114,7 +102,6 @@ public class ConfiguationEntity {
 
 	@Data
 	public static class EdgeDatacenterCharacteristicsEntity {
-
 		String architecture;
 		String os;
 		String vmm;
@@ -128,18 +115,15 @@ public class ConfiguationEntity {
 		double costPerBw;
 		List<String> communicationProtocolSupported;
 		List<String> ioTDeviceClassNameSupported;
-
 	}
 
 	@Data
 	public static class BrokerEntity {
-
 		String name;
 	}
 
 	@Data
 	public static class MELEntities {
-
 		// int brokerAssignmentId;
 		int vmid;
 		int mips;
@@ -153,7 +137,6 @@ public class ConfiguationEntity {
 		String type;
 		String edgeOperationClass;
 		float datasizeShrinkFactor;
-		
 	}
 
 	@Data
@@ -174,12 +157,10 @@ public class ConfiguationEntity {
 		double battery_drainage_rate;
 		double processingAbility;
 		EdgeLetEntity dataTemplate;
-
 	}
 
 	@Data
 	public static class EdgeLetEntity {
-
 		int cloudletId;
 		long cloudletLength;
 		int pesNumber;
@@ -188,15 +169,12 @@ public class ConfiguationEntity {
 		String utilizationModelCpu;
 		String utilizationModelRam;
 		String utilizationModelBw;
-
 	}
 
 	@Data
 	public static class NetworkModelEntity {
-
 		private String networkType;
 		private String communicationProtocol;
-
 	}
 
 	private List<ConnectionEntity> connections;
@@ -205,7 +183,6 @@ public class ConfiguationEntity {
 	public static class ConnectionEntity {
 		private int vmId;
 		private int assigmentIoTId;
-
 	}
 
 	@Data

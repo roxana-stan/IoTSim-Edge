@@ -237,7 +237,6 @@ public class EdgeDataCenterCreation extends Application {
 
 		grid.add(textField, col + 1, row);
 		return textField;
-
 	}
 
 }

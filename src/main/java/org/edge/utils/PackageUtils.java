@@ -9,10 +9,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class PackageUtils {
-	/**
-	 * 
 
-	 */
 	public static List<Class> getClasssFromPackage(String pack) {
 	  List<Class> clazzs = new ArrayList<Class>();
 

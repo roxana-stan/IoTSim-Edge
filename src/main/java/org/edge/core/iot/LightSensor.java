@@ -34,18 +34,11 @@ public class LightSensor extends IoTDevice {
 	public static final int PROCESSING_ABILITY=1;
 
 
-
-
-
-
-
 	public LightSensor(
 			NetworkModel networkModel, long capacityToStore, double transfer_frequency) {
 		super(IoTType.ENVIRONMENTAL_SENSOR,"temperatureSensor", DATA_FREQUENCY,DATA_GENERATION_TIME, COMPLEXITY_OF_DATAPACKAGE, DATA_SIZE, networkModel, MAX_BATTERY_CAPACITY, BATTERY_DRAINAGE_RATE,
 				PROCESSING_ABILITY, capacityToStore, transfer_frequency,edgeLet);
 	}
-
-
 
 	public LightSensor(
 			NetworkModel networkModel
@@ -54,20 +47,13 @@ public class LightSensor extends IoTDevice {
 				PROCESSING_ABILITY,edgeLet);
 	}
 
-
-
 	@Override
 	public boolean updateBatteryBySensing(Battery battery) {
 		battery.setCurrentCapacity(battery.getCurrentCapacity()-this.battery_drainage_rate);
 		if(battery.getCurrentCapacity()<0)
-			return  true;
+			return true;
 		return false;
-
-
-
 	}
-
-
 
 	@Override
 	public boolean updateBatteryByProcessing(Battery battery) {
@@ -110,33 +96,20 @@ public class LightSensor extends IoTDevice {
 		return speedRate;
 	}
 
-
-
-
-
-
-
 	@Override
 	public void startEntity() {
 		super.startEntity();
 	}
-
-
 
 	@Override
 	public void processEvent(SimEvent ev) {
 		super.processEvent(ev);
 	}
 
-
-
 	@Override
 	public void shutdownEntity() {
 
 	}
-
-
-
 
 	@Override
 	public double getNetworkDelay() {
@@ -155,23 +128,9 @@ public class LightSensor extends IoTDevice {
 		return networkDelay;
 	}
 
-
-
 	@Override
 	public EdgeLet processData(EdgeLet generated_data) {
-
 		return generated_data;
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -10,7 +10,4 @@ public class MicroElementTopologyEntity {
 	private int id;
 	private Integer upLinkId;
 	private List<Integer> downLinkIds;
-	
-
-	
 }

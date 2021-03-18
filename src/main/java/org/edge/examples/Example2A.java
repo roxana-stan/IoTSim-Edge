@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletScheduler;
-import org.cloudbus.cloudsim.Log;
+//import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
@@ -76,13 +76,13 @@ public class Example2A {
 		this.initCloudSim(conf);
 
 		EdgeDataCenterBroker broker = this.createBroker(conf);
-		List<IoTDevice> edgeDevices=this.createIoTDevice(conf);
+		List<IoTDevice> edgeDevices = this.createIoTDevice(conf);
 
-		List<EdgeDataCenter> datacenters=this.createDataCenter(conf);
-		List<MicroELement> melList=this.createMEL(conf,broker);
-		List<ConnectionHeader>  header=this.setUpConnection(conf,edgeDevices,broker.getId());
+		List<EdgeDataCenter> datacenters = this.createDataCenter(conf);
+		List<MicroELement> melList = this.createMEL(conf, broker);
+		List<ConnectionHeader> header = this.setUpConnection(conf, edgeDevices, broker.getId());
 		
-		this.buildupEMLConnection(melList,conf.getMELEntities());			
+		this.buildupEMLConnection(melList, conf.getMELEntities());			
 	
 		broker.submitVmList(melList);
 		broker.submitConnection(header);
@@ -90,89 +90,82 @@ public class Example2A {
 		this.initLog(conf);
 		String indent = "    ";
 		LogUtil.info("Start-exp");
-		LogUtil.info("Number of IoT "+indent+edgeDevices.size());
-		LogUtil.info("Config of IoT Battary"+indent+edgeDevices.get(0).getBattery().getCurrentCapacity());
+		LogUtil.info("Number of IoT " + indent + edgeDevices.size());
+		LogUtil.info("Config of IoT Battery" + indent + edgeDevices.get(0).getBattery().getCurrentCapacity());
 		CloudSim.startSimulation();
-		
-		
 		
 		
 		List<Cloudlet> cloudletReceivedList = broker.getCloudletReceivedList();
 		
-		printCloudletList(cloudletReceivedList, melList,datacenters);
+		printCloudletList(cloudletReceivedList, melList, datacenters);
 		LogUtil.simulationFinished();
-		
-		
 	}
-	private void buildupEMLConnection(List<MicroELement> vmList,	List<MELEntities> vmEntities) {
-		
+	
+	private void buildupEMLConnection(List<MicroELement> vmList, List<MELEntities> vmEntities) {
 		// TODO Auto-generated method stub
 		for (MicroELement microELement : vmList) {
 			int id = microELement.getId();
 			MicroElementTopologyEntity topologyEntity = null;
 			inner :for ( MELEntities to : vmEntities) {
-				if(to.getMELTopology().getId()==id)
-				{
+				if (to.getMELTopology().getId() == id) {
 					topologyEntity=to.getMELTopology();
-					break inner; 
+					break inner;
 				}				
 			}
 			
-			if(topologyEntity==null)
-				throw new MicroElementNotFoundException("cannot find topology for MicroElement "+id);
+			if (topologyEntity == null)
+				throw new MicroElementNotFoundException("cannot find topology for MicroElement " + id);
 			//find uplink and bind it
 			Integer upLinkId = topologyEntity.getUpLinkId();
-			if(upLinkId!=null) {
+			if (upLinkId != null) {
 				inner: for (MicroELement microELement2 : vmList) {
-					if(microELement2.getId()==upLinkId) {
+					if (microELement2.getId() == upLinkId) {
 						microELement.setUpLink(microELement2);
 						break inner;
 					}
 				}
-			if(microELement.getUpLink()==null)
-				throw new MicroElementNotFoundException("cannot find uplink "+upLinkId+" for MicroElement "+id);
+				if (microELement.getUpLink() == null)
+					throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
 			}
 			
 			List<Integer> downLinkIds = topologyEntity.getDownLinkIds();
 			downLinkIds.remove(null);
-			List<MicroELement> downLink=new ArrayList<>();
+			List<MicroELement> downLink = new ArrayList<>();
 			microELement.setDownLink(downLink);
 			for (Integer downLinkID : downLinkIds) {
 				//find the MEL having the same downLinkID
 				//and set the MEL to  microELement
 			
-				boolean found=false;
+				boolean found = false;
 				inner: for (MicroELement elm : vmList) {
-					
-					if(elm.getId()==downLinkID) {
-						if(downLink.contains(elm)) {
-							throw new  IllegalAccessError("the EML: "+id+"cannot bind the same downlink twice");							
+					if (elm.getId() == downLinkID) {
+						if (downLink.contains(elm)) {
+							throw new IllegalAccessError("the EML: " + id + "cannot bind the same downlink twice");							
 						}
 						downLink.add(elm);
-						found=true;
+						found = true;
 						break inner;
-					}else 
-					if(downLinkID==id) {
-						throw new  IllegalAccessError("the EML "+id+"'s downlink cannot be itself");
+					} else 
+					if (downLinkID == id) {
+						throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
 					}
-					
 				}
-				if(!found) {
-					throw new  IllegalAccessError("cannot find the downlink: "+downLinkID+"for EML "+id);
+				if (!found) {
+					throw new IllegalAccessError("cannot find the downlink: " + downLinkID + "for EML " + id);
 				}			
 			}
 		}
 	}
 	
-	private static void printCloudletList(List<Cloudlet> list,List<MicroELement>melList, List<EdgeDataCenter> datacenters ) {
+	private static void printCloudletList(List<Cloudlet> list, List<MicroELement> melList, List<EdgeDataCenter> datacenters) {
 		int size = list.size();
 		Cloudlet edgeLet;
 
 		String indent = "    ";
 		LogUtil.info("========== OUTPUT ==========");
-		LogUtil.info("Edgelet ID" + indent + 
-				"MicroELement ID" + indent + "Execution Time" + indent
-				+ "Start Time" + indent + "Finish Time"+indent+ "Length" + indent + "Size");
+		LogUtil.info("Edgelet ID" + indent 
+				+ "MicroELement ID" + indent + "Execution Time" + indent
+				+ "Start Time" + indent + "Finish Time" + indent + "Length" + indent + "Size");
 
 		DecimalFormat dft = new DecimalFormat("0.00");
 		DecimalFormat idft = new DecimalFormat("000");
@@ -182,40 +175,32 @@ public class Example2A {
 			//Log.print(indent + idft.format(edgeLet.getCloudletId()) + indent + indent);
 
 			if (edgeLet.getStatus() == Cloudlet.SUCCESS) {
-				
 				LogUtil.info(
-						indent + idft.format(edgeLet.getCloudletId()) + indent + indent+
-						  edgeLet.getVmId()+indent
+						indent + idft.format(edgeLet.getCloudletId()) + indent + indent
+						+ edgeLet.getVmId() + indent
 						+ indent + indent
-						+ dft.format(edgeLet.getActualCPUTime()) +indent + indent
-						+ indent  + dft.format(edgeLet.getExecStartTime())
-						+ indent  + indent
+						+ dft.format(edgeLet.getActualCPUTime()) + indent + indent
+						+ indent + dft.format(edgeLet.getExecStartTime())
+						+ indent + indent
 						+ dft.format(edgeLet.getFinishTime())
-						+ indent  + indent +
-						edgeLet.getCloudletLength() 
-						+ indent  + indent +
-						edgeLet.getCloudletFileSize()
-					
-						);
+						+ indent + indent
+						+ edgeLet.getCloudletLength() 
+						+ indent + indent
+						+ edgeLet.getCloudletFileSize());
 			}
 		}
-		
-		
-		
-		
+
 		
 		edgeLet = list.get(list.size()-1);
 		edgeLet.getUtilizationModelRam().getUtilization(0);
 			
-			//LogUtil.info(edgeLet = list.get());
+		//LogUtil.info(edgeLet = list.get());
 		
-			EdgeDevice e=(EdgeDevice)datacenters.get(0).getHostList().get(0);
-			LogUtil.info(" EdgeDevice Consumed energy, "+ (e.getMaxBatteryCapacity() - e.getCurrentBatteryCapacity())+indent+" Time"+edgeLet.getFinishTime());
-			LogUtil.info("end-exp");
-	
-	
-		
+		EdgeDevice e = (EdgeDevice)datacenters.get(0).getHostList().get(0);
+		LogUtil.info(" EdgeDevice Consumed energy, " + (e.getMaxBatteryCapacity() - e.getCurrentBatteryCapacity()) + indent + " Time " + edgeLet.getFinishTime());
+		LogUtil.info("End-exp");
 	}
+	
 	/**
 	 * log initialization
 	 *
@@ -230,8 +215,6 @@ public class Example2A {
 			boolean append = logEntity.isAppend();
 			LogUtil.initLog(Level.valueOf(logLevel.toUpperCase()), logFilePath, saveLogToFile,append);
 		}
-
-
 	}
 
 	/**
@@ -241,19 +224,15 @@ public class Example2A {
 		Configuration annotations = this.getClass().getAnnotation(Configuration.class);
 		String value = annotations.value();
 		
-		
-		if(value==null||value.isEmpty())
-		{
+		if (value == null || value.isEmpty()) {
 			throw new IllegalArgumentException("configuration file required!");
 		}
 
 		InputStream resource = this.getClass().getClassLoader().getResourceAsStream(		value);
 		Gson gson = new Gson();
 		ConfiguationEntity conf = gson.fromJson(new InputStreamReader(resource), ConfiguationEntity.class);
-		
 	
-			this.initFromConfiguation(conf);
-		
+		this.initFromConfiguation(conf);
 	}
 
 	/**
@@ -264,22 +243,19 @@ public class Example2A {
 	 * @return
 	 */
 	private List<ConnectionHeader>   setUpConnection(ConfiguationEntity conf, List<IoTDevice> edgeDevices, int brokerId) {
+		List<ConnectionHeader> header = new ArrayList<>();
+		
 		List<ConnectionEntity> connections = conf.getConnections();
-		List<ConnectionHeader>  header=new ArrayList<>();
 		for (ConnectionEntity connectionEntity : connections) {
 			int assigmentIoTId = connectionEntity.getAssigmentIoTId();
 			for (IoTDevice edgeDevice : edgeDevices) {
-
-				if(edgeDevice.getAssigmentIoTId()==assigmentIoTId) {
+				if (edgeDevice.getAssigmentIoTId() == assigmentIoTId) {
 					int vmId = connectionEntity.getVmId();
-
 					header.add(new ConnectionHeader(vmId, edgeDevice.getId(), brokerId, edgeDevice.getNetworkModel().getCommunicationProtocol().getClass()));
-
-
 				}
 			}
-
 		}
+		
 		return header;
 	}
 
@@ -290,10 +266,10 @@ public class Example2A {
 	 * @return
 	 */
 	private List<MicroELement> createMEL(ConfiguationEntity conf, EdgeDataCenterBroker broker) {
+		List<MicroELement> vms = new ArrayList<>();
+		
 		List<MELEntities> melEntities = conf.getMELEntities();
-		List<MicroELement> vms=new ArrayList<>();
 		for (MELEntities melEntity : melEntities) {
-			
 			String cloudletSchedulerClassName = melEntity.getCloudletSchedulerClassName();
 			CloudletScheduler cloudletScheduler;
 			try {
@@ -304,73 +280,69 @@ public class Example2A {
 				cloudletScheduler = (CloudletScheduler) Class.forName(cloudletSchedulerClassName).newInstance();
 				float datasizeShrinkFactor = melEntity.getDatasizeShrinkFactor();
 				String type = melEntity.getType();
-				MicroELement microELement=new MicroELement(melEntity.getVmid()	, broker.getId(),melEntity.getMips(),
+				MicroELement microELement = new MicroELement(melEntity.getVmid(), broker.getId(), melEntity.getMips(),
 						melEntity.getPesNumber(),
-						melEntity.getRam(),melEntity.getBw(),melEntity.getSize(), melEntity.getVmm(), cloudletScheduler,
-						type,datasizeShrinkFactor
-						);
+						melEntity.getRam(), melEntity.getBw(), melEntity.getSize(), melEntity.getVmm(), cloudletScheduler,
+						type, datasizeShrinkFactor);
 				microELement.setEdgeOperation(edgeOperation);
 				
 				vms.add(microELement);
 				MicroElementTopologyEntity melTopology = melEntity.getMELTopology();
 				melTopology.setId(microELement.getId());
-				
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-		
-			
 		}
+
 		return vms;
 	}
 
-
-
 	/**
-	 * create Iot Device from configuration
+	 * Create IoT Device from configuration
 	 * @param conf
 	 * @return
 	 */
 	private List<IoTDevice> createIoTDevice(ConfiguationEntity conf) {
-		String indent = "    ";
+		List<IoTDevice> devices = new ArrayList<>();
+		
 		List<IotDeviceEntity> ioTDeviceEntities = conf.getIoTDeviceEntities();
-		List<IoTDevice>  devices=new ArrayList<>();
 		for (IotDeviceEntity iotDeviceEntity : ioTDeviceEntities) {
 			List<IoTDevice> createIoTDevice = this.createIoTDevice(iotDeviceEntity);
-			if (createIoTDevice.size()==0)
+			if (createIoTDevice.size() == 0)
 				return null;
 			devices.addAll(createIoTDevice);
 		}
+		
 		return devices;
 	}
+	
 	/**
+	 * Create data center.
 	 *
-	 * create data center;
 	 * @param conf
 	 * @return
 	 */
 	private List<EdgeDataCenter> createDataCenter(ConfiguationEntity conf) {
-		List<EdgeDataCenter> datacenters=new ArrayList<>();
+		List<EdgeDataCenter> datacenters = new ArrayList<>();
+		
 		List<EdgeDataCenterEntity> edgeDatacenterEntities = conf.getEdgeDatacenter();
-
 		for (EdgeDataCenterEntity edgeDataCenterEntity : edgeDatacenterEntities) {
 			EdgeDataCenter createEdgeDatacenter = this.createEdgeDatacenter(edgeDataCenterEntity);
 			datacenters.add(createEdgeDatacenter);
 		}
 
 		return datacenters;
-
 	}
+	
 	/**
-	 * init CloudSim
+	 * Initialize CloudSim.
 	 * @param conf
 	 */
 	private void initCloudSim(ConfiguationEntity conf) {
 		int numUser = conf.getNumUser(); // number of cloud users
-		Calendar calendar = Calendar.getInstance(); // Calendar whose fields have been initialized with the current date
-		// and time.
+		Calendar calendar = Calendar.getInstance(); // Calendar whose fields have been initialized with the current date and time.
 
-		//whether prining every single event in console
+		//whether printing every single event in console
 		boolean trace_flag = conf.isTrace_flag(); // trace events
 
 		CloudSim.init(numUser, calendar, trace_flag);
@@ -383,11 +355,10 @@ public class Example2A {
 	}
 
 	/**
-	 * Creates the datacenter.
-	 * @param name
-	 *            the name
+	 * Creates the data center.
+	 * @param entity
 	 *
-	 * @return the datacenter
+	 * @return the data center
 	 */
 	private EdgeDataCenter createEdgeDatacenter(EdgeDataCenterEntity entity) {
 
@@ -537,26 +508,23 @@ public class Example2A {
 		EdgeType edgeType2=null;
 		switch(upperCase) {
 		case "RASPBERRY_PI":
-			edgeType2=EdgeType.RASPBERRY_PI;
+			edgeType2 = EdgeType.RASPBERRY_PI;
 			break;
 
 		case "SMART_ROUTER":
-			edgeType2=EdgeType.SMART_ROUTER;
-
+			edgeType2 = EdgeType.SMART_ROUTER;
 			break;
 
 		case "UDOO_BOARD":
-			edgeType2=EdgeType.UDOO_BOARD;
-
+			edgeType2 = EdgeType.UDOO_BOARD;
 			break;
 
 		case "MOBILE_PHONE":
-			edgeType2=EdgeType.MOBILE_PHONE;
-
+			edgeType2 = EdgeType.MOBILE_PHONE;
 			break;
 
 		default:
-			System.out.println("the edgeDevice type "+edgeType+" has not been supported yet!");
+			System.out.println("the EdgeDevice type " + edgeType + " has not been supported yet!");
 			break;
 		}
 
@@ -565,6 +533,7 @@ public class Example2A {
 
 	private List<Pe> getPeList(List<PeEntity> peEntities) {
 		List<Pe> peList = new ArrayList<Pe>();
+
 		for (PeEntity peEntity : peEntities) {
 			int mips = peEntity.getMips();
 			String peProvisionerClassName = peEntity.getPeProvisionerClassName();
@@ -582,7 +551,7 @@ public class Example2A {
 	}
 
 	private List<IoTDevice> createIoTDevice(IotDeviceEntity iotDeviceEntity) {
-		List<IoTDevice> devices=new ArrayList<>();
+		List<IoTDevice> devices = new ArrayList<>();
 		String ioTClassName = iotDeviceEntity.ioTClassName;
 		NetworkModelEntity networkModelEntity = iotDeviceEntity.getNetworkModelEntity();
 		// xmpp mqtt coap amqp
@@ -616,10 +585,7 @@ public class Example2A {
 				devices.add(newInstance);
 			}
 
-
-
 			return devices;
-
 		} catch (ClassCastException e) {
 			e.printStackTrace();
 		} catch (Exception e) {

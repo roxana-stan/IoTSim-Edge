@@ -24,7 +24,7 @@ public final class ConnectionHeader {
 	/**
 	 * direction that the iot Device will move to
 	 */
-	public  Direction direction;
+	public Direction direction;
 
 	//where is this header sent from;
 	public int sourceId;
@@ -33,6 +33,7 @@ public final class ConnectionHeader {
 		LEFT,
 		RIGHT
 	}
+	
 	/**
 	 *
 	 * @return true if this header is from ioT
@@ -43,18 +44,15 @@ public final class ConnectionHeader {
 			return true;
 		}
 		return false;
-
 	}
 
-
-	public ConnectionHeader(int vmId, int ioTId,int brokeId,Class communicationProtocolForIoT) {
+	public ConnectionHeader(int vmId, int ioTId, int brokeId, Class communicationProtocolForIoT) {
 		super();
 		this.vmId = vmId;
 		this.ioTId = ioTId;
-		this.ioTDeviceType=CloudSim.getEntity(ioTId).getClass();
-		this.brokeId=brokeId;
-		this.communicationProtocolForIoT=communicationProtocolForIoT;
+		this.ioTDeviceType = CloudSim.getEntity(ioTId).getClass();
+		this.brokeId = brokeId;
+		this.communicationProtocolForIoT = communicationProtocolForIoT;
 	}
-
 
 }

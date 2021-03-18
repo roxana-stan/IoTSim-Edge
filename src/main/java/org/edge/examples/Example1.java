@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletScheduler;
-import org.cloudbus.cloudsim.Log;
+//import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
@@ -76,13 +76,13 @@ public class Example1 {
 		this.initCloudSim(conf);
 
 		EdgeDataCenterBroker broker = this.createBroker(conf);
-		List<IoTDevice> edgeDevices=this.createIoTDevice(conf);
+		List<IoTDevice> edgeDevices = this.createIoTDevice(conf);
 
-		List<EdgeDataCenter> datacenters=this.createDataCenter(conf);
-		List<MicroELement> melList=this.createMEL(conf,broker);
-		List<ConnectionHeader>  header=this.setUpConnection(conf,edgeDevices,broker.getId());
+		List<EdgeDataCenter> datacenters = this.createDataCenter(conf);
+		List<MicroELement> melList = this.createMEL(conf, broker);
+		List<ConnectionHeader> header = this.setUpConnection(conf, edgeDevices, broker.getId());
 		
-		this.buildupEMLConnection(melList,conf.getMELEntities());			
+		this.buildupEMLConnection(melList, conf.getMELEntities());			
 	
 		broker.submitVmList(melList);
 		broker.submitConnection(header);
@@ -90,52 +90,46 @@ public class Example1 {
 		this.initLog(conf);
 		String indent = "    ";
 		LogUtil.info("Start-exp");
-		LogUtil.info("Number of IoT "+indent+edgeDevices.size());
-		LogUtil.info("Config of IoT Battary"+indent+edgeDevices.get(0).getBattery().getCurrentCapacity());
+		LogUtil.info("Number of IoT " + indent + edgeDevices.size());
+		LogUtil.info("Config of IoT Battery" + indent + edgeDevices.get(0).getBattery().getCurrentCapacity());
 		CloudSim.startSimulation();
-		
-		
-		
 		
 		List<Cloudlet> cloudletReceivedList = broker.getCloudletReceivedList();
 		
-		printCloudletList(cloudletReceivedList, melList,datacenters);
+		printCloudletList(cloudletReceivedList, melList, datacenters);
 		LogUtil.simulationFinished();
-		
-		
 	}
-	private void buildupEMLConnection(List<MicroELement> vmList,	List<MELEntities> vmEntities) {
-		
+	
+	private void buildupEMLConnection(List<MicroELement> vmList, List<MELEntities> vmEntities) {
 		// TODO Auto-generated method stub
 		for (MicroELement microELement : vmList) {
 			int id = microELement.getId();
 			MicroElementTopologyEntity topologyEntity = null;
 			inner :for ( MELEntities to : vmEntities) {
-				if(to.getMELTopology().getId()==id)
-				{
-					topologyEntity=to.getMELTopology();
+				if (to.getMELTopology().getId() == id) {
+					topologyEntity = to.getMELTopology();
 					break inner; 
-				}				
+				}
 			}
 			
-			if(topologyEntity==null)
+			if (topologyEntity == null)
 				throw new MicroElementNotFoundException("cannot find topology for MicroElement "+id);
 			//find uplink and bind it
 			Integer upLinkId = topologyEntity.getUpLinkId();
-			if(upLinkId!=null) {
+			if (upLinkId != null) {
 				inner: for (MicroELement microELement2 : vmList) {
-					if(microELement2.getId()==upLinkId) {
+					if (microELement2.getId() == upLinkId) {
 						microELement.setUpLink(microELement2);
 						break inner;
 					}
 				}
-			if(microELement.getUpLink()==null)
-				throw new MicroElementNotFoundException("cannot find uplink "+upLinkId+" for MicroElement "+id);
+			if (microELement.getUpLink() == null)
+				throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
 			}
 			
 			List<Integer> downLinkIds = topologyEntity.getDownLinkIds();
 			downLinkIds.remove(null);
-			List<MicroELement> downLink=new ArrayList<>();
+			List<MicroELement> downLink = new ArrayList<>();
 			microELement.setDownLink(downLink);
 			for (Integer downLinkID : downLinkIds) {
 				//find the MEL having the same downLinkID
@@ -143,36 +137,34 @@ public class Example1 {
 			
 				boolean found=false;
 				inner: for (MicroELement elm : vmList) {
-					
-					if(elm.getId()==downLinkID) {
-						if(downLink.contains(elm)) {
-							throw new  IllegalAccessError("the EML: "+id+"cannot bind the same downlink twice");							
+					if (elm.getId() == downLinkID) {
+						if (downLink.contains(elm)) {
+							throw new IllegalAccessError("the EML: " + id + "cannot bind the same downlink twice");							
 						}
 						downLink.add(elm);
 						found=true;
 						break inner;
-					}else 
-					if(downLinkID==id) {
-						throw new  IllegalAccessError("the EML "+id+"'s downlink cannot be itself");
+					} else 
+					if (downLinkID == id) {
+						throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
 					}
-					
 				}
-				if(!found) {
-					throw new  IllegalAccessError("cannot find the downlink: "+downLinkID+"for EML "+id);
-				}			
+				if (!found) {
+					throw new IllegalAccessError("cannot find the downlink: " + downLinkID + "for EML " + id);
+				}
 			}
 		}
 	}
 	
-	private static void printCloudletList(List<Cloudlet> list,List<MicroELement>melList, List<EdgeDataCenter> datacenters ) {
+	private static void printCloudletList(List<Cloudlet> list, List<MicroELement> melList, List<EdgeDataCenter> datacenters) {
 		int size = list.size();
 		Cloudlet edgeLet;
 
 		String indent = "    ";
 		LogUtil.info("========== OUTPUT ==========");
-		LogUtil.info("Edgelet ID" + indent + 
-				"MicroELement ID" + indent + "Execution Time" + indent
-				+ "Start Time" + indent + "Finish Time"+indent+ "Length" + indent + "Size");
+		LogUtil.info("Edgelet ID" + indent
+				+ "MicroELement ID" + indent + "Execution Time" + indent
+				+ "Start Time" + indent + "Finish Time" + indent + "Length" + indent + "Size");
 
 		DecimalFormat dft = new DecimalFormat("0.00");
 		DecimalFormat idft = new DecimalFormat("000");
@@ -182,46 +174,36 @@ public class Example1 {
 			//Log.print(indent + idft.format(edgeLet.getCloudletId()) + indent + indent);
 
 			if (edgeLet.getStatus() == Cloudlet.SUCCESS) {
-				
 				LogUtil.info(
-						indent + idft.format(edgeLet.getCloudletId()) + indent + indent+
-						  edgeLet.getVmId()+indent
+						indent + idft.format(edgeLet.getCloudletId()) + indent + indent
+						+ edgeLet.getVmId() + indent
 						+ indent + indent
-						+ dft.format(edgeLet.getActualCPUTime()) +indent + indent
-						+ indent  + dft.format(edgeLet.getExecStartTime())
-						+ indent  + indent
+						+ dft.format(edgeLet.getActualCPUTime()) + indent + indent
+						+ indent + dft.format(edgeLet.getExecStartTime())
+						+ indent + indent
 						+ dft.format(edgeLet.getFinishTime())
-						+ indent  + indent +
-						edgeLet.getCloudletLength() 
-						+ indent  + indent +
-						edgeLet.getCloudletFileSize()
-					
-						);
+						+ indent + indent
+						+ edgeLet.getCloudletLength() 
+						+ indent + indent
+						+ edgeLet.getCloudletFileSize());
 			}
 		}
-		
-		
-		
 		
 		
 		edgeLet = list.get(list.size()-1);
 		edgeLet.getUtilizationModelRam().getUtilization(0);
 			
-			EdgeDevice e=(EdgeDevice)datacenters.get(0).getHostList().get(0);
-			LogUtil.info(" EdgeDevice Consumed energy, "+ (e.getMaxBatteryCapacity() - e.getCurrentBatteryCapacity()));
+			EdgeDevice e =(EdgeDevice)datacenters.get(0).getHostList().get(0);
+			LogUtil.info(" EdgeDevice Consumed energy, " + (e.getMaxBatteryCapacity() - e.getCurrentBatteryCapacity()));
 			//LogUtil.info(edgeLet = list.get());
-			if(datacenters.get(0).getHostList().size()>1)
-			{
+			if (datacenters.get(0).getHostList().size() > 1) {
 				e=(EdgeDevice)datacenters.get(0).getHostList().get(1);
-				LogUtil.info(" EdgeDevice Consumed energy, "+ (e.getMaxBatteryCapacity() - e.getCurrentBatteryCapacity()));
-
+				LogUtil.info(" EdgeDevice Consumed energy, " + (e.getMaxBatteryCapacity() - e.getCurrentBatteryCapacity()));
 			}
 		
-			 	LogUtil.info("end-exp");
-	
-	
-		
+		LogUtil.info("End-exp");
 	}
+	
 	/**
 	 * log initialization
 	 *
@@ -230,14 +212,12 @@ public class Example1 {
 	private void initLog(ConfiguationEntity conf) {
 		LogEntity logEntity = conf.getLogEntity();
 		boolean saveLogToFile = logEntity.isSaveLogToFile();
-		if(saveLogToFile) {
+		if (saveLogToFile) {
 			String logFilePath = logEntity.getLogFilePath();
 			String logLevel = logEntity.getLogLevel();
 			boolean append = logEntity.isAppend();
 			LogUtil.initLog(Level.valueOf(logLevel.toUpperCase()), logFilePath, saveLogToFile,append);
 		}
-
-
 	}
 
 	/**
@@ -247,19 +227,15 @@ public class Example1 {
 		Configuration annotations = this.getClass().getAnnotation(Configuration.class);
 		String value = annotations.value();
 		
-		
-		if(value==null||value.isEmpty())
-		{
+		if (value == null || value.isEmpty()) {
 			throw new IllegalArgumentException("configuration file required!");
 		}
 
-		InputStream resource = this.getClass().getClassLoader().getResourceAsStream(		value);
+		InputStream resource = this.getClass().getClassLoader().getResourceAsStream(value);
 		Gson gson = new Gson();
 		ConfiguationEntity conf = gson.fromJson(new InputStreamReader(resource), ConfiguationEntity.class);
-		
-	
-			this.initFromConfiguation(conf);
-		
+
+		this.initFromConfiguation(conf);
 	}
 
 	/**
@@ -269,23 +245,20 @@ public class Example1 {
 	 * @param brokerId
 	 * @return
 	 */
-	private List<ConnectionHeader>   setUpConnection(ConfiguationEntity conf, List<IoTDevice> edgeDevices, int brokerId) {
+	private List<ConnectionHeader> setUpConnection(ConfiguationEntity conf, List<IoTDevice> edgeDevices, int brokerId) {
+		List<ConnectionHeader> header = new ArrayList<>();
+		
 		List<ConnectionEntity> connections = conf.getConnections();
-		List<ConnectionHeader>  header=new ArrayList<>();
 		for (ConnectionEntity connectionEntity : connections) {
 			int assigmentIoTId = connectionEntity.getAssigmentIoTId();
 			for (IoTDevice edgeDevice : edgeDevices) {
-
-				if(edgeDevice.getAssigmentIoTId()==assigmentIoTId) {
+				if (edgeDevice.getAssigmentIoTId() == assigmentIoTId) {
 					int vmId = connectionEntity.getVmId();
-
 					header.add(new ConnectionHeader(vmId, edgeDevice.getId(), brokerId, edgeDevice.getNetworkModel().getCommunicationProtocol().getClass()));
-
-
 				}
 			}
-
 		}
+		
 		return header;
 	}
 
@@ -296,10 +269,10 @@ public class Example1 {
 	 * @return
 	 */
 	private List<MicroELement> createMEL(ConfiguationEntity conf, EdgeDataCenterBroker broker) {
+		List<MicroELement> vms = new ArrayList<>();
+		
 		List<MELEntities> melEntities = conf.getMELEntities();
-		List<MicroELement> vms=new ArrayList<>();
 		for (MELEntities melEntity : melEntities) {
-			
 			String cloudletSchedulerClassName = melEntity.getCloudletSchedulerClassName();
 			CloudletScheduler cloudletScheduler;
 			try {
@@ -310,27 +283,21 @@ public class Example1 {
 				cloudletScheduler = (CloudletScheduler) Class.forName(cloudletSchedulerClassName).newInstance();
 				float datasizeShrinkFactor = melEntity.getDatasizeShrinkFactor();
 				String type = melEntity.getType();
-				MicroELement microELement=new MicroELement(melEntity.getVmid()	, broker.getId(),melEntity.getMips(),
+				MicroELement microELement = new MicroELement(melEntity.getVmid(), broker.getId(), melEntity.getMips(),
 						melEntity.getPesNumber(),
-						melEntity.getRam(),melEntity.getBw(),melEntity.getSize(), melEntity.getVmm(), cloudletScheduler,
-						type,datasizeShrinkFactor
-						);
+						melEntity.getRam(), melEntity.getBw(), melEntity.getSize(), melEntity.getVmm(), cloudletScheduler,
+						type, datasizeShrinkFactor);
 				microELement.setEdgeOperation(edgeOperation);
 				
 				vms.add(microELement);
 				MicroElementTopologyEntity melTopology = melEntity.getMELTopology();
 				melTopology.setId(microELement.getId());
-				
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-		
-			
 		}
 		return vms;
 	}
-
-
 
 	/**
 	 * create Iot Device from configuration
@@ -338,45 +305,46 @@ public class Example1 {
 	 * @return
 	 */
 	private List<IoTDevice> createIoTDevice(ConfiguationEntity conf) {
-		String indent = "    ";
+		List<IoTDevice> devices = new ArrayList<>();
+		
 		List<IotDeviceEntity> ioTDeviceEntities = conf.getIoTDeviceEntities();
-		List<IoTDevice>  devices=new ArrayList<>();
 		for (IotDeviceEntity iotDeviceEntity : ioTDeviceEntities) {
 			List<IoTDevice> createIoTDevice = this.createIoTDevice(iotDeviceEntity);
-			if (createIoTDevice.size()==0)
+			if (createIoTDevice.size() == 0)
 				return null;
 			devices.addAll(createIoTDevice);
 		}
+		
 		return devices;
 	}
+	
 	/**
+	 * Create data center.
 	 *
-	 * create data center;
 	 * @param conf
 	 * @return
 	 */
 	private List<EdgeDataCenter> createDataCenter(ConfiguationEntity conf) {
-		List<EdgeDataCenter> datacenters=new ArrayList<>();
+		List<EdgeDataCenter> datacenters = new ArrayList<>();
+		
 		List<EdgeDataCenterEntity> edgeDatacenterEntities = conf.getEdgeDatacenter();
-
 		for (EdgeDataCenterEntity edgeDataCenterEntity : edgeDatacenterEntities) {
 			EdgeDataCenter createEdgeDatacenter = this.createEdgeDatacenter(edgeDataCenterEntity);
 			datacenters.add(createEdgeDatacenter);
 		}
 
 		return datacenters;
-
 	}
+	
 	/**
-	 * init CloudSim
+	 * Init CloudSim
 	 * @param conf
 	 */
 	private void initCloudSim(ConfiguationEntity conf) {
 		int numUser = conf.getNumUser(); // number of cloud users
-		Calendar calendar = Calendar.getInstance(); // Calendar whose fields have been initialized with the current date
-		// and time.
+		Calendar calendar = Calendar.getInstance(); // Calendar whose fields have been initialized with the current date and time.
 
-		//whether prining every single event in console
+		//whether printing every single event in console
 		boolean trace_flag = conf.isTrace_flag(); // trace events
 
 		CloudSim.init(numUser, calendar, trace_flag);
@@ -389,14 +357,12 @@ public class Example1 {
 	}
 
 	/**
-	 * Creates the datacenter.
-	 * @param name
-	 *            the name
+	 * Create the data center.
+	 * @param entity
 	 *
-	 * @return the datacenter
+	 * @return the data center
 	 */
 	private EdgeDataCenter createEdgeDatacenter(EdgeDataCenterEntity entity) {
-
 		List<HostEntity> hostListEntities = entity.getCharacteristics().getHostListEntities();
 		List<EdgeDevice> hostList = new ArrayList<EdgeDevice>();
 		try {
@@ -404,37 +370,35 @@ public class Example1 {
 				NetworkModelEntity networkModelEntity = hostEntity.getNetworkModel();
 				NetworkModel networkModel = this.getNetworkModel(networkModelEntity);
 				List<PeEntity> peEntities = hostEntity.getPeEntities();
-				List<Pe> peList=this.getPeList(peEntities);
+				List<Pe> peList = this.getPeList(peEntities);
 				RamProvisionerEntity ramProvisionerEntity = hostEntity.getRamProvisioner();
 				Constructor<?> ramconstructor;
 
 				ramconstructor = Class.forName(ramProvisionerEntity.getClassName()).getConstructor(int.class);
 
-				RamProvisioner ramProvisioner=(RamProvisioner) ramconstructor.newInstance(ramProvisionerEntity.getRamSize());
+				RamProvisioner ramProvisioner = (RamProvisioner) ramconstructor.newInstance(ramProvisionerEntity.getRamSize());
 
 				BwProvisionerEntity bwProvisionerEntity = hostEntity.getBwProvisioner();
 				Constructor<?> bwconstructor = Class.forName(bwProvisionerEntity.getClassName()).getConstructor(double.class);
-				BwProvisioner bwProvisioner=(BwProvisioner) bwconstructor.newInstance(bwProvisionerEntity.getBwSize());
+				BwProvisioner bwProvisioner = (BwProvisioner) bwconstructor.newInstance(bwProvisionerEntity.getBwSize());
 				VmSchedulerEntity vmSchedulerEntity = hostEntity.getVmScheduler();
 				String vmSchedulerClassName = vmSchedulerEntity.getClassName();
 				VmScheduler vmScheduler = (VmScheduler) Class.forName(vmSchedulerClassName).getConstructor(List.class).newInstance(peList);
 				MobilityEntity geo_location = hostEntity.getGeo_location();
-				Mobility location=new Mobility(geo_location.getLocation());
-				location.movable=geo_location.isMovable();
-				location.signalRange=geo_location.getSignalRange();
-				if(geo_location.isMovable()) {
-					location.volecity=geo_location.getVolecity();
+				Mobility location = new Mobility(geo_location.getLocation());
+				location.movable = geo_location.isMovable();
+				location.signalRange = geo_location.getSignalRange();
+				if (geo_location.isMovable()) {
+					location.volecity = geo_location.getVolecity();
 				}
 
-				EdgeDevice edgeDevice = new EdgeDevice(hostEntity.getId(),ramProvisioner,bwProvisioner,hostEntity.getStorage(),peList,
-						vmScheduler,this.getEdgeType(hostEntity.getEdgeType()),networkModel,
-						hostEntity.getMax_IoTDevice_capacity(),hostEntity.getMax_battery_capacity(),
-						hostEntity.getBattery_drainage_rate(),hostEntity.getCurrent_battery_capacity());
+				EdgeDevice edgeDevice = new EdgeDevice(hostEntity.getId(), ramProvisioner, bwProvisioner, hostEntity.getStorage(), peList,
+						vmScheduler, this.getEdgeType(hostEntity.getEdgeType()), networkModel,
+						hostEntity.getMax_IoTDevice_capacity(), hostEntity.getMax_battery_capacity(),
+						hostEntity.getBattery_drainage_rate(), hostEntity.getCurrent_battery_capacity());
 				edgeDevice.setMobility(location);
 
 				hostList.add(edgeDevice);
-			
-			
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -476,7 +440,7 @@ public class Example1 {
 		double costPerBw = characteristicsEntity.getCostPerBw();
 		LinkedList<Storage> storageList = new LinkedList<Storage>();
 		List<String> ioTDeviceClassNameSupported = characteristicsEntity.getIoTDeviceClassNameSupported();
-		Class[] ioTDeviceClassSupported=new Class[ioTDeviceClassNameSupported.size()];
+		Class[] ioTDeviceClassSupported = new Class[ioTDeviceClassNameSupported.size()];
 		int i=0;
 		for (String string : ioTDeviceClassNameSupported) {
 			try {
@@ -488,7 +452,7 @@ public class Example1 {
 			i++;
 		}
 		List<String> communicationNameSupported = characteristicsEntity.getCommunicationProtocolSupported();
-		Class[] communicationClassSupported=new Class[communicationNameSupported.size()];
+		Class[] communicationClassSupported = new Class[communicationNameSupported.size()];
 		i=0;
 		for (String name : communicationNameSupported) {
 			switch(name.toLowerCase()) {
@@ -512,9 +476,7 @@ public class Example1 {
 
 
 		EdgeDatacenterCharacteristics characteristics = new EdgeDatacenterCharacteristics(architecture, os, vmm, hostList,
-				timeZone, cost, costPerMem, costPerStorage, costPerBw,communicationClassSupported,
-				ioTDeviceClassSupported);
-
+				timeZone, cost, costPerMem, costPerStorage, costPerBw, communicationClassSupported, ioTDeviceClassSupported);
 
 
 		// Here are the steps needed to create a PowerDatacenter:
@@ -529,7 +491,7 @@ public class Example1 {
 		EdgeDataCenter datacenter = null;
 		try {
 			VmAllocationPolicy vmAllocationPolicy = (VmAllocationPolicy)Class.forName(className).getConstructor(List.class).newInstance(hostList);
-			datacenter = new EdgeDataCenter(entity.getName(), characteristics,vmAllocationPolicy,
+			datacenter = new EdgeDataCenter(entity.getName(), characteristics, vmAllocationPolicy,
 					storageList, entity.getSchedulingInterval());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -540,7 +502,7 @@ public class Example1 {
 
 	private EdgeType getEdgeType(String edgeType) {
 		String upperCase = edgeType.toUpperCase();
-		EdgeType edgeType2=null;
+		EdgeType edgeType2 = null;
 		switch(upperCase) {
 		case "RASPBERRY_PI":
 			edgeType2=EdgeType.RASPBERRY_PI;
@@ -548,21 +510,18 @@ public class Example1 {
 
 		case "SMART_ROUTER":
 			edgeType2=EdgeType.SMART_ROUTER;
-
 			break;
 
 		case "UDOO_BOARD":
 			edgeType2=EdgeType.UDOO_BOARD;
-
 			break;
 
 		case "MOBILE_PHONE":
 			edgeType2=EdgeType.MOBILE_PHONE;
-
 			break;
 
 		default:
-			System.out.println("the edgeDevice type "+edgeType+" has not been supported yet!");
+			System.out.println("the edgeDevice type " + edgeType + " has not been supported yet!");
 			break;
 		}
 
@@ -571,6 +530,7 @@ public class Example1 {
 
 	private List<Pe> getPeList(List<PeEntity> peEntities) {
 		List<Pe> peList = new ArrayList<Pe>();
+
 		for (PeEntity peEntity : peEntities) {
 			int mips = peEntity.getMips();
 			String peProvisionerClassName = peEntity.getPeProvisionerClassName();
@@ -588,7 +548,7 @@ public class Example1 {
 	}
 
 	private List<IoTDevice> createIoTDevice(IotDeviceEntity iotDeviceEntity) {
-		List<IoTDevice> devices=new ArrayList<>();
+		List<IoTDevice> devices = new ArrayList<>();
 		String ioTClassName = iotDeviceEntity.ioTClassName;
 		NetworkModelEntity networkModelEntity = iotDeviceEntity.getNetworkModelEntity();
 		// xmpp mqtt coap amqp
@@ -601,31 +561,28 @@ public class Example1 {
 			}
 			Constructor<?> constructor = clazz.getConstructor(NetworkModel.class);
 			int numberofEntity = iotDeviceEntity.getNumberofEntity();
-			for (int i = 0; i <numberofEntity; i++) {
-
+			for (int i = 0; i < numberofEntity; i++) {
 				IoTDevice newInstance = (IoTDevice) constructor.newInstance(networkModel);
 				newInstance.setAssigmentIoTId(iotDeviceEntity.getAssignmentId());
 				
 				newInstance.setBatteryDrainageRate(iotDeviceEntity.getBattery_drainage_rate());
 				newInstance.getBattery().setMaxCapacity(iotDeviceEntity.getMax_battery_capacity());
 				newInstance.getBattery().setCurrentCapacity(iotDeviceEntity.getMax_battery_capacity());
-				Mobility location=new Mobility(iotDeviceEntity.getMobilityEntity().getLocation());
-				location.movable=iotDeviceEntity.getMobilityEntity().isMovable();
-				if(iotDeviceEntity.getMobilityEntity().isMovable()) {
-					location.range=new MovingRange(iotDeviceEntity.getMobilityEntity().getRange().beginX,
-							iotDeviceEntity.getMobilityEntity().getRange().endX);
-					location.signalRange=iotDeviceEntity.getMobilityEntity().getSignalRange();
-					location.volecity=iotDeviceEntity.getMobilityEntity().getVolecity();
+				Mobility location = new Mobility(iotDeviceEntity.getMobilityEntity().getLocation());
+				location.movable = iotDeviceEntity.getMobilityEntity().isMovable();
+				if (iotDeviceEntity.getMobilityEntity().isMovable()) {
+					location.range = new MovingRange(
+												iotDeviceEntity.getMobilityEntity().getRange().beginX,
+												iotDeviceEntity.getMobilityEntity().getRange().endX);
+					location.signalRange = iotDeviceEntity.getMobilityEntity().getSignalRange();
+					location.volecity = iotDeviceEntity.getMobilityEntity().getVolecity();
 				}
 				newInstance.setMobility(location);
 				
 				devices.add(newInstance);
 			}
 
-
-
 			return devices;
-
 		} catch (ClassCastException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
