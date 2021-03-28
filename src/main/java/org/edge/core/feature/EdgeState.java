@@ -1,7 +1,7 @@
 package org.edge.core.feature;
 
 public class EdgeState {
-	public static final int BASE=111;
+	public static final int BASE = 111;
 	public static final int REQUEST_CONNECTION = BASE+1;
 	public static final int REQUEST_DISCONNECTION = BASE+2;
 
@@ -23,7 +23,7 @@ public class EdgeState {
 
 	public static final int PROCESSING_FINISHED = BASE+11;
 
-	public static final int RECEIVING =BASE+ 12;
+	public static final int RECEIVING = BASE+12;
 	public static final int RECEIVING_FINISHED = BASE+13;
 
 	public static final int MOVING = BASE+14;
@@ -33,12 +33,12 @@ public class EdgeState {
 	public static final int BATTERY_DRAINED = BASE+17;
 
 	public static final int REQUEST_ACTUATING = BASE+18;
-	public static final int ACTUATING_FINISHED =BASE+ 19;
+	public static final int ACTUATING_FINISHED = BASE+19;
 
 	public static final int CONNECTING_ACK = BASE+20;
 	public static final int DISCONNECTING_ACK = BASE+21;
-	public static final int SUCCESS =  BASE+22;
-	public static final int FAILURE =  BASE+23;
+	public static final int SUCCESS = BASE+22;
+	public static final int FAILURE = BASE+23;
 	public static final int INITILIZE_CONNECTION = BASE+24;
 	public static final int PROCESSING = BASE+25;
 

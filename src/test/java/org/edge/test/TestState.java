@@ -6,8 +6,6 @@ import org.junit.Test;
 
 public class TestState {
 
-	
-	
 	  /**
      * 256 128 64  32 16  8 4 2 1
      * 1    1   1   1  1  1 1 1 1
@@ -36,12 +34,9 @@ public class TestState {
 	
 	@Test
 	public void testClass(){
-		Class s=TemperatureSensor.class;
-		Class iot=IoTDevice.class;
+		Class s = TemperatureSensor.class;
+		Class iot = IoTDevice.class;
 		System.out.println(iot.isAssignableFrom(s));
-		
-		
 	}
-	
-	
+
 }

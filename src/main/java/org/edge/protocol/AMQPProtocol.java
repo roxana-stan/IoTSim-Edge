@@ -9,6 +9,7 @@ import org.edge.protocol.attribute.Synchronism;
 import org.edge.protocol.attribute.TransportProtocol;
 
 public class AMQPProtocol extends CommonCommuniProtocol {
+
 	public static final float BATTERY_DRAINAGE_RATE = 1.0f;
 	public static final float TRANSIMISON_SPEED = 1.0f;
 

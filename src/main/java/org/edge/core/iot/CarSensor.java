@@ -15,8 +15,8 @@ public class CarSensor extends IoTDevice {
 
 	static EdgeLet edgeLet;
 	static {
-		edgeLet = new EdgeLet(EdgeLet.id++, 1000, 1, 30, 10, new UtilizationModelFull(), new UtilizationModelFull(),
-				new UtilizationModelFull());
+		edgeLet = new EdgeLet(EdgeLet.id++, 1000, 1, 30, 10,
+							new UtilizationModelFull(), new UtilizationModelFull(), new UtilizationModelFull());
 	}
 	public static final double DATA_GENERATION_TIME = 1;
 
@@ -44,7 +44,7 @@ public class CarSensor extends IoTDevice {
 	@Override
 	public boolean updateBatteryBySensing(Battery battery) {
 		battery.setCurrentCapacity(battery.getCurrentCapacity()-this.battery_drainage_rate);
-		if(battery.getCurrentCapacity()<0)
+		if (battery.getCurrentCapacity() < 0)
 			return true;
 		return false;
 	}

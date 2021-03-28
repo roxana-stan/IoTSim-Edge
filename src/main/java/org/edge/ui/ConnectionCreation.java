@@ -41,37 +41,35 @@ public class ConnectionCreation extends Application {
 		UIEntity userData = (UIEntity) primaryStage.getUserData();
 		ConfiguationEntity configuationEntity = userData.getConfiguationEntity();
 		List<MELEntities> vmEntities = configuationEntity.getMELEntities();
-		Label range = new Label(" vm id range:"+vmEntities.get(0).getVmid()+"-"+vmEntities.get(vmEntities.size()-1).getVmid() );
+		Label range = new Label(" vm id range:" + vmEntities.get(0).getVmid() + "-" + vmEntities.get(vmEntities.size()-1).getVmid());
 
 		List<ConnectionEntity> connections = new ArrayList<>();
 		configuationEntity.setConnections(connections);
 
 		List<IotDeviceEntity> ioTDeviceEntities = configuationEntity.getIoTDeviceEntities();
 
-		
-		int index=2;
+		int index = 2;
 		grid.add(label, 0, 0);
 		grid.add(range, 0, 1);
 		
-		
-		List<TextField> textFields=new ArrayList<TextField>();
+		List<TextField> textFields = new ArrayList<TextField>();
 		for (IotDeviceEntity iotDeviceEntity : ioTDeviceEntities) {
-			Label userName = new Label("iot "+iotDeviceEntity.assignmentId +" will connect to VM ");
+			Label userName = new Label("iot " + iotDeviceEntity.assignmentId + " will connect to VM ");
 			grid.add(userName, 0, index);
-			TextField field=new TextField(vmEntities.get(0).getVmid()+"");
+			TextField field = new TextField(vmEntities.get(0).getVmid() + "");
 			textFields.add(field);
 			grid.add(field, 1, index);
 			index++;
 		}
 
-		Button button=new Button("build up simulator");
-		grid.add(button,0,index+1);
+		Button button = new Button("build up simulator");
+		grid.add(button, 0, index+1);
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				Example2A up=new Example2A();
-				int ioTAssignId=1;
+				Example2A up = new Example2A();
+				int ioTAssignId = 1;
 				List<ConnectionEntity> connectionEntities=new ArrayList<>();
 				for (TextField textField : textFields) {
 					String text = textField.getText();
@@ -83,7 +81,7 @@ public class ConnectionCreation extends Application {
 					ioTAssignId++;
 				}
 				configuationEntity.setConnections(connectionEntities);
-				
+
 			/*	Gson gson=new Gson();
 				String json = gson.toJson(configuationEntity);*/
 				up.initFromConfiguation(configuationEntity);
@@ -91,8 +89,7 @@ public class ConnectionCreation extends Application {
 		});
 		primaryStage.setTitle("IotSim");
 		primaryStage.setScene(scene);
-		
-		
+
 		primaryStage.show();
 	}
 	

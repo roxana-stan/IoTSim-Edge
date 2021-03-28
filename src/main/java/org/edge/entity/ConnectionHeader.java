@@ -7,7 +7,7 @@ import org.cloudbus.cloudsim.core.CloudSim;
  * this is a network header like a http header, in which
  * it contains all the information needed to set up connection.
  * for example, it has the vmID and IoT Device ID.
- * what kind of communication protocols the iot device used, and what kind of
+ * what kind of communication protocols the IoT device used, and what kind of
  * communication protocols the edge devices support.
  *
  * @author cody
@@ -29,7 +29,7 @@ public final class ConnectionHeader {
 	//where is this header sent from;
 	public int sourceId;
 
-	public static enum Direction{
+	public static enum Direction {
 		LEFT,
 		RIGHT
 	}
@@ -40,7 +40,7 @@ public final class ConnectionHeader {
 	 * otherwise return false
 	 */
 	public boolean getSourceType() {
-		if(this.sourceId==this.ioTId) {
+		if (this.sourceId == this.ioTId) {
 			return true;
 		}
 		return false;

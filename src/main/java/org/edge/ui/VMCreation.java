@@ -52,8 +52,6 @@ public class VMCreation extends  Application{
 
 		grid.add(label, 0, 0);
 
-		
-
 		TextField mips = addInputWithTextReminder(grid, "mips:", 0, 1);
 		mips.setText("10000");
 		TextField size = addInputWithTextReminder(grid, "size:", 0, 2);
@@ -71,10 +69,8 @@ public class VMCreation extends  Application{
 		
 		TextField cloudletSchedulerClassName = addInputWithTextReminder(grid, "cloudletSchedulerClassName:", 0, 7);
 		cloudletSchedulerClassName.setText("org.cloudbus.cloudsim.CloudletSchedulerTimeShared");
-		
-		
-			
-		
+
+
 		primaryStage.setTitle("IotSim");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -102,9 +98,7 @@ public class VMCreation extends  Application{
 					}
 					ConfiguationEntity configuationEntity = userData.getConfiguationEntity();
 					configuationEntity.setMELEntities(entities);
-					
-					
-					
+
 					new ConnectionCreation().start(primaryStage);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -157,5 +151,5 @@ public class VMCreation extends  Application{
 		grid.add(textField, col + 1, row);
 		return textField;
 	}
-	
+
 }

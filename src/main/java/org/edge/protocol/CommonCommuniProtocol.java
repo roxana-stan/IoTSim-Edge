@@ -30,8 +30,8 @@ public  abstract class CommonCommuniProtocol implements CommunicationProtocol {
 
 	public CommonCommuniProtocol(int runningPort, TransportProtocol[] transportPortProtocol,
 			SecurityProtocol[] securityProtocol, int headSize, long maxMessageSize, Architecture[] architecture,
-			String name, Synchronism[] synchronism, QoS[] qos, float batteryConsumptionSpeed,
-			float transmissionSpeed) {
+			String name, Synchronism[] synchronism, QoS[] qos,
+			float batteryConsumptionSpeed, float transmissionSpeed) {
 		super();
 		this.runningPort = runningPort;
 		this.transportPortProtocol = transportPortProtocol;

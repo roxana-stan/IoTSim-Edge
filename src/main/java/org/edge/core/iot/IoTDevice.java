@@ -22,8 +22,8 @@ import org.edge.network.NetworkModel;
 import org.edge.utils.LogUtil;
 
 /**
- * can LoT devices store sensed data if the data cannot be sent at a time? can
- * those states happen simultaneously?
+ * Can IoT devices store sensed data if the data cannot be sent at a time?
+ * Can those states happen simultaneously?
  *
  * @author cody
  *
@@ -35,12 +35,19 @@ public abstract class IoTDevice extends SimEntity {
 	private static final int pesNumber = 1;
 	public static int cloudLetId = 0;
 	private static final double MOVE_INTERVAL = 0.5d;
-	private boolean logPrinted=false;
+	private boolean logPrinted = false;
 	/**
 	 * size of the data package
 	 */
 	private int brokerId;
 	private int assigmentIoTId;
+	private NetworkDelayCalculationPolicy networkDelayCalculationPolicy;
+	/**
+	 * used to show how fast can this device process data
+	 */
+	private double processingAbility;
+	private int complexityOfDataPackage;
+	int connectingEdgeDeviceId = -1;
 
 	public NetworkDelayCalculationPolicy getNetworkDelayCalculationPolicy() {
 		return this.networkDelayCalculationPolicy;
@@ -50,8 +57,6 @@ public abstract class IoTDevice extends SimEntity {
 		this.networkDelayCalculationPolicy = networkDelayCalculationPolicy;
 	}
 
-	private NetworkDelayCalculationPolicy networkDelayCalculationPolicy;
-
 	public int getAssigmentIoTId() {
 		return this.assigmentIoTId;
 	}
@@ -59,12 +64,6 @@ public abstract class IoTDevice extends SimEntity {
 	public void setAssigmentIoTId(int assigmentIoTId) {
 		this.assigmentIoTId = assigmentIoTId;
 	}
-
-	/**
-	 * used to show how fast can this device process data
-	 */
-	private double processingAbility;
-	private int complexityOfDataPackage;
 
 	public double getRunningTime() {
 		return this.runningTime;
@@ -177,8 +176,6 @@ public abstract class IoTDevice extends SimEntity {
 	public IoTType getType() {
 		return this.ioTType;
 	}
-
-	int connectingEdgeDeviceId = -1;
 
 	public void setEdgeDeviceId(int id) {
 		this.connectingEdgeDeviceId = id;
@@ -443,9 +440,9 @@ public abstract class IoTDevice extends SimEntity {
 
 		case EdgeState.MOVING:
 			if (this.attachedEdgeDeviceVMId == NULL_DEVICE) {
-				ConnectionHeader connectionHeader2 = new ConnectionHeader(attachedEdgeDeviceVMId,getId(), brokerId, getNetworkModel().getCommunicationProtocol().getClass());
-				connectionHeader2.brokeId=brokerId;
-				connectionHeader2.ioTId=getId();
+				ConnectionHeader connectionHeader2 = new ConnectionHeader(attachedEdgeDeviceVMId, getId(), brokerId, getNetworkModel().getCommunicationProtocol().getClass());
+				connectionHeader2.brokeId = brokerId;
+				connectionHeader2.ioTId = getId();
 
 				this.send(this.brokerId, 0, EdgeState.REQUEST_CONNECTION, connectionHeader2);
 			}

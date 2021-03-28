@@ -6,13 +6,12 @@ import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.edge.core.iot.IoTDevice;
 import org.edge.protocol.CommunicationProtocol;
 
-
 /**
  * 
  * @author cody
  *
  */
-public class EdgeDatacenterCharacteristics extends DatacenterCharacteristics{
+public class EdgeDatacenterCharacteristics extends DatacenterCharacteristics {
 
 	private Class<? extends CommunicationProtocol>[] communicationProtocolSupported;
 	private Class<? extends IoTDevice>[] ioTDeviceSupported;

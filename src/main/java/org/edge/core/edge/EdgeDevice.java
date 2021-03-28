@@ -17,7 +17,7 @@ import org.edge.entity.ConnectionHeader;
 import org.edge.network.NetworkModel;
 import org.edge.utils.LogUtil;
 
-public class EdgeDevice extends Host{
+public class EdgeDevice extends Host {
 
 	private EdgeType type;
 	private boolean enabled;
@@ -112,7 +112,7 @@ public class EdgeDevice extends Host{
 
 	public boolean connect_IoT_device(ConnectionHeader header) {
 		if (this.getNumberOfAttachedLoTDevice() >= this.max_IoTDevice_capacity) {
-			LogUtil.info("Connection failure due to excess the max capacity of IotDevice in the host");
+			LogUtil.info("Connection failure due to excess the max capacity of IoTDevice in the host");
 			return false;
 		}
 		this.attached_IoTDevices.add(header.ioTId);

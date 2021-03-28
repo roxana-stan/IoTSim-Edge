@@ -19,23 +19,23 @@ public class SimpleNetworkDelayCalculator implements NetworkDelayCalculationPoli
 		NetworkType netWorkType = networkModel.getNetWorkType();
 		double cloudletLength = let.getCloudletLength();
 		Location location = self.location;
-		double distanceDelay=0;
-		if(target!=null) {
+		double distanceDelay = 0;
+		if (target != null) {
 			Location location2 = target.location;
-			double x=location2.x-location.x;
-			double y=location2.y-location.y;
+			double x = location2.x - location.x;
+			double y = location2.y - location.y;
 			distanceDelay = Math.sqrt((x*x)+(y*y));
 		}
 		float transmissionSpeed = communicationProtocol.getTransmissionSpeed();
 		double speedRate = netWorkType.getSpeedRate();
 
-		double minSpeed= Math.min(transmissionSpeed, speedRate);
+		double minSpeed = Math.min(transmissionSpeed, speedRate);
 		//to change the cloudlet length can make the whole calculation simply.
-		//easier to do demostration.
-		cloudletLength=(long) minSpeed;
-		double delay=cloudletLength/ minSpeed;
+		//easier to do demonstration.
+		cloudletLength = (long) minSpeed;
+		double delay = cloudletLength / minSpeed;
 	
-		return delay+distanceDelay;
+		return delay + distanceDelay;
 	}
 
 }

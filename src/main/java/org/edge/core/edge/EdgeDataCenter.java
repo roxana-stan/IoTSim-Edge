@@ -25,18 +25,18 @@ public class EdgeDataCenter extends Datacenter {
 
 	private EdgeDatacenterCharacteristics characteristics;
 
+	public EdgeDataCenter(String name, EdgeDatacenterCharacteristics characteristics,
+			VmAllocationPolicy vmAllocationPolicy, List<Storage> storageList, double schedulingInterval)
+					throws Exception {
+		super(name, characteristics, vmAllocationPolicy, storageList, schedulingInterval);
+		this.characteristics = characteristics;
+	}
+	
 	public EdgeDatacenterCharacteristics getEdgeCharacteristics() {
 		return this.characteristics;
 	}
 
 	public void setEdgeCharacteristics(EdgeDatacenterCharacteristics characteristics) {
-		this.characteristics = characteristics;
-	}
-
-	public EdgeDataCenter(String name, EdgeDatacenterCharacteristics characteristics,
-			VmAllocationPolicy vmAllocationPolicy, List<Storage> storageList, double schedulingInterval)
-					throws Exception {
-		super(name, characteristics, vmAllocationPolicy, storageList, schedulingInterval);
 		this.characteristics = characteristics;
 	}
 
@@ -78,11 +78,11 @@ public class EdgeDataCenter extends Datacenter {
 	}
 
 	/**
-	 * set up connection between edge devices in this data center and iot devices
-	 * @param ev its data contains connection information between edge device and iot device
+	 * set up connection between edge devices in this data center and IoT devices
+	 * @param ev its data contains connection information between edge device and IoT device
 	 */
 	private void processConnectionRequest(SimEvent ev) {
-		//		LogUtil.info(CloudSim.clock());
+		//LogUtil.info(CloudSim.clock());
 		ConnectionHeader info = (ConnectionHeader) ev.getData();
 		Class<? extends CommunicationProtocol>[] supported_comm_protocols_for_IoT = this.getEdgeCharacteristics()
 				.getCommunicationProtocolSupported();
@@ -124,11 +124,11 @@ public class EdgeDataCenter extends Datacenter {
 			}
 		}
 		if (supportDevice) {
-			this.schedule(info.ioTId, this.getNeworkDelay(new DevicesInfo(info.ioTId, info.vmId)), EdgeState.DISCONNECTED,EdgeState.UNSUPPORTED_COMMUNICATION_PROTOCOL);
+			this.schedule(info.ioTId, this.getNeworkDelay(new DevicesInfo(info.ioTId, info.vmId)), EdgeState.DISCONNECTED, EdgeState.UNSUPPORTED_COMMUNICATION_PROTOCOL);
 			LogUtil.info("EdgeDataCenter: the edgeDevice cannot support protocol "
 					+ info.communicationProtocolForIoT.getSimpleName() + "for ioTdevice " + info.ioTId);
 		} else {
-			this.schedule(info.ioTId, this.getNeworkDelay(new DevicesInfo(info.ioTId, info.vmId)), EdgeState.DISCONNECTED,EdgeState.UNSUPPORTED_IOT_DEVICE);
+			this.schedule(info.ioTId, this.getNeworkDelay(new DevicesInfo(info.ioTId, info.vmId)), EdgeState.DISCONNECTED, EdgeState.UNSUPPORTED_IOT_DEVICE);
 			LogUtil.info("EdgeDataCenter: the edgeDevice cannot support IoT device "
 					+ info.ioTDeviceType.getSimpleName());
 		}
@@ -138,8 +138,8 @@ public class EdgeDataCenter extends Datacenter {
 	}
 
 	/**
-	 * get network delay between edge device and iot device.
-	 * for now, it simply return 0
+	 * Get network delay between edge device and IoT device.
+	 * For now, it simply returns 0.
 	 * @param devicesInfo 
 	 */
 	private double getNeworkDelay(DevicesInfo devicesInfo) {

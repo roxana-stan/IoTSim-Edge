@@ -9,6 +9,7 @@ import org.edge.protocol.attribute.Synchronism;
 import org.edge.protocol.attribute.TransportProtocol;
 
 public class XMPPProtocol extends CommonCommuniProtocol {
+
 	private static final float BATTERY_DRAINAGE_RATE = 1.50f;
 	private static final float TRANSIMISON_SPEED = 3.00f;
 

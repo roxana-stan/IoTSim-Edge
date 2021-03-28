@@ -10,8 +10,8 @@ public class VoiceSensor extends IoTDevice {
 
 	static EdgeLet edgeLet;
 	static {
-		edgeLet = new EdgeLet(EdgeLet.id++,500, 1, 10, 10, new UtilizationModelFull(), new UtilizationModelFull(),
-				new UtilizationModelFull());
+		edgeLet = new EdgeLet(EdgeLet.id++, 500, 1, 10, 10,
+							new UtilizationModelFull(), new UtilizationModelFull(), new UtilizationModelFull());
 	}
 	public static final double DATA_GENERATION_TIME = 1;
 
@@ -68,14 +68,13 @@ public class VoiceSensor extends IoTDevice {
 	@Override
 	public boolean updateBatteryBySensing(Battery battery) {
 		battery.setCurrentCapacity(battery.getCurrentCapacity()-battery_drainage_rate);
-		if(battery.getCurrentCapacity()<=0)
+		if (battery.getCurrentCapacity() <= 0)
 			return true;
 		return false;
 	}
 
 	@Override
 	public void shutdownEntity() {
-
 	}
 
 	@Override

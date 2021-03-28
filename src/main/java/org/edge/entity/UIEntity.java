@@ -51,7 +51,7 @@ public class UIEntity {
 	}
 	
 	public int getNumberOfUser() {
-		if(numberOfUser<=0)
+		if (numberOfUser <= 0)
 			return 1;
 		return numberOfUser;
 	}
@@ -61,7 +61,7 @@ public class UIEntity {
 	}
 	
 	public int getNumberOfIotDevice() {
-		if(numberOfIotDevice<=0)
+		if (numberOfIotDevice <= 0)
 			return 1;
 		return numberOfIotDevice;
 	}
@@ -71,7 +71,7 @@ public class UIEntity {
 	}
 	
 	public int getNumberOfEdgeDevice() {
-		if(numberOfEdgeDevice<=0)
+		if (numberOfEdgeDevice <= 0)
 			return 1;
 		return numberOfEdgeDevice;
 	}
@@ -81,7 +81,7 @@ public class UIEntity {
 	}
 	
 	public int getNumberOfDataCenter() {
-		if(numberOfDataCenter<=0)
+		if (numberOfDataCenter <= 0)
 			return 1;
 		return numberOfDataCenter;
 	}

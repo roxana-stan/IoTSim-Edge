@@ -20,7 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public class Main  extends Application{
+public class Main extends Application {
 	
 	private Stage primaryStage;
 
@@ -35,64 +35,57 @@ public class Main  extends Application{
     	grid.setAlignment(Pos.CENTER);
     	grid.setHgap(10);
     	grid.setVgap(10);
-    	grid.setPadding(new Insets(10,10,10,10));
+    	grid.setPadding(new Insets(10, 10, 10, 10));
 
-    	Scene scene = new Scene(grid, 600,300);
-    	
-  
+    	Scene scene = new Scene(grid, 600, 300);
 
-    	CheckBox box=new CheckBox("trace");
+    	CheckBox box = new CheckBox("trace");
     	grid.add(box, 0, 0);
     	Label users = new Label("number of users");
-    	grid.add(users, 0,1);
-    	NumberTextField numberUser=new NumberTextField();
-    	
+    	grid.add(users, 0, 1);
+    	NumberTextField numberUser = new NumberTextField();
+
     	numberUser.setMaxWidth(50);
-    	grid.add(numberUser,1,1);
+    	grid.add(numberUser, 1, 1);
     	numberUser.setText("1");
-    	
-    	
+
     	Label datacenterLabel = new Label("number of datacenters:");
-    	grid.add(datacenterLabel, 0,2);
-    	NumberTextField datacenter=new NumberTextField();
+    	grid.add(datacenterLabel, 0, 2);
+    	NumberTextField datacenter = new NumberTextField();
     	datacenter.setText("1");
     	datacenter.setMaxWidth(50);
-    	grid.add(datacenter,1,2);
-    	
+    	grid.add(datacenter, 1, 2);
+
     	Label numberOfIoTdeviceLabel = new Label("number of iotDevices:");
-    	grid.add(numberOfIoTdeviceLabel, 0,3);
+    	grid.add(numberOfIoTdeviceLabel, 0, 3);
     	NumberTextField iotDevices=new NumberTextField();
     	iotDevices.setText("1");
-    	
+
     	iotDevices.setMaxWidth(50);
-    	grid.add(iotDevices,1,3);
-    	
+    	grid.add(iotDevices, 1, 3);
+
     	Label numberOfEdgedeviceLabel = new Label("number of edgeDevices:");
-    	grid.add(numberOfEdgedeviceLabel, 0,4);
+    	grid.add(numberOfEdgedeviceLabel, 0, 4);
     	NumberTextField edgeDevices=new NumberTextField();
     	edgeDevices.setText("1");
-    	
+
     	edgeDevices.setMaxWidth(50);
-    	grid.add(edgeDevices,1,4);
-    
+    	grid.add(edgeDevices, 1, 4);
+
     	Label numberOfVMsLabel = new Label("number of VMs:");
-    	grid.add(numberOfVMsLabel, 0,5);
+    	grid.add(numberOfVMsLabel, 0, 5);
     	NumberTextField numberOfVMs=new NumberTextField();
     	numberOfVMs.setText("1");
-    	
+
     	numberOfVMs.setMaxWidth(50);
-    	grid.add(numberOfVMs,1,5);
-    	
-      	
-	
+    	grid.add(numberOfVMs, 1, 5);
+
     	TextField brokerName = addInputWithTextReminder(grid, "broker name", 0, 6);
-    	
     	brokerName.setText("broker1");
-    	
-    	
+
     	Button btn = new Button("next step");
     	btn.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent event) {
 				try {
@@ -107,12 +100,10 @@ public class Main  extends Application{
 					entity.setTrace(box.isSelected());
 					BrokerEntity broker = new BrokerEntity();
 					broker.setName(entity.getBrokerName());
-					ConfiguationEntity configuationEntity=new ConfiguationEntity();
+					ConfiguationEntity configuationEntity = new ConfiguationEntity();
 					configuationEntity.setBroker(broker);
 					configuationEntity.setTrace_flag(box.isSelected());
 					configuationEntity.setNumUser(entity.getNumberOfUser());
-					
-			
 					
 					primaryStage.setUserData(entity);
 					entity.setConfiguationEntity(configuationEntity);
@@ -126,7 +117,7 @@ public class Main  extends Application{
     	hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
     	hbBtn.getChildren().add(btn);
     	grid.add(hbBtn, 1, 7);
- 
+
         primaryStage.setTitle("IotSim");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -136,7 +127,7 @@ public class Main  extends Application{
 		Label userName = new Label(textReminder);
     	grid.add(userName, col, row);
     	TextField textField = new TextField();
-    	
+
     	grid.add(textField, col+1, row);
     	return textField;
 	}

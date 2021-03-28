@@ -124,9 +124,6 @@ public class EdgeDataCenterCreation extends Application {
 			
 		}
 		
-		
-		
-		
 
 		primaryStage.setTitle("IotSim");
 		primaryStage.setScene(scene);
@@ -205,7 +202,7 @@ public class EdgeDataCenterCreation extends Application {
 			
 		});
 		grid.add(btn, 2, row+1);
-		grid.add(btn2, 1,row+1);
+		grid.add(btn2, 1, row+1);
 
 	}
 
@@ -227,7 +224,6 @@ public class EdgeDataCenterCreation extends Application {
 
 		}
 		return parseDouble;
-
 	}
 
 	private TextField addInputWithTextReminder(GridPane grid, String textReminder, int col, int row) {

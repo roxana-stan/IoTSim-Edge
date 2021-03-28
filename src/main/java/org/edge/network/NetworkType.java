@@ -9,10 +9,10 @@ public enum NetworkType {
     BLUETOOTH(2d),
     LAN(3);
 	private double value;
-	private NetworkType(double  value){
-		this.value=value;
+	private NetworkType(double value) {
+		this.value = value;
 	}
-	public double getSpeedRate(){
+	public double getSpeedRate() {
 		return value;
 	}
 }

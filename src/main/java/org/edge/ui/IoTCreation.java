@@ -30,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class IoTCreation extends Application {
+
 	private static final double maxWidth = 100;
 
 	@Override
@@ -85,7 +86,6 @@ public class IoTCreation extends Application {
 		Label networkModel = new Label("atrributes of networkModel:");
 
 		grid.add(networkModel, 0, 11);
-		
 	
 		
 		/*
@@ -130,7 +130,7 @@ public class IoTCreation extends Application {
 		TextField rangeEnd = addInputWithTextReminder(grid, "rangeEnd:", 2, 7);
 		rangeEnd.setText("0");
 		
-		TextField velocity = addInputWithTextReminder(grid, "velocity:", 2,8);
+		TextField velocity = addInputWithTextReminder(grid, "velocity:", 2, 8);
 		velocity.setText("0");
 		
 		primaryStage.setTitle("IotSim");
@@ -245,7 +245,6 @@ public class IoTCreation extends Application {
 		textField.setMaxWidth(maxWidth);
 		grid.add(textField, col + 1, row);
 		return textField;
-
 	}
 
 }

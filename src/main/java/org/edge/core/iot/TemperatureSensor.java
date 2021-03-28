@@ -19,8 +19,8 @@ public class TemperatureSensor extends IoTDevice {
 		long length = 1000;
 		long fileSize = 30;
 		long outputSize = 10;
-		edgeLet = new EdgeLet(EdgeLet.id++, length, 1, fileSize, outputSize, new UtilizationModelFull(), new UtilizationModelFull(),
-				new UtilizationModelFull());
+		edgeLet = new EdgeLet(EdgeLet.id++, length, 1, fileSize, outputSize,
+							new UtilizationModelFull(), new UtilizationModelFull(), new UtilizationModelFull());
 	}
 	public static final double DATA_GENERATION_TIME = 1;
 
@@ -103,7 +103,6 @@ public class TemperatureSensor extends IoTDevice {
 
 	@Override
 	public void shutdownEntity() {
-
 	}
 
 	@Override
@@ -119,7 +118,6 @@ public class TemperatureSensor extends IoTDevice {
 		}
 
 		double networkDelay = networkDelayCalculationPolicy.getNetworkDelay(this.getNetworkModel(), edgeLet, this.getMobility(), null);
-		
 		return networkDelay;
 	}
 
