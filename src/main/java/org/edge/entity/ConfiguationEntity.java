@@ -192,14 +192,15 @@ public class ConfiguationEntity {
 		private MovingRangeEntity range;
 		private double signalRange;
 		private Location location;
+
 		public MobilityEntity(Location location) {
 			super();
 			this.location = location;
 		}
+
 		public MobilityEntity() {
 			super();
 		}
-
 	}
 
 	public static class MovingRangeEntity {

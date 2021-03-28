@@ -15,8 +15,6 @@ import com.google.gson.stream.JsonReader;
 
 public class MicroElementTopologyTest {
 
-	
-	
 	/**
 	 *     0
 	 *   1   2
@@ -25,45 +23,44 @@ public class MicroElementTopologyTest {
 	 */
 	@Test
 	public void buildupTopology() {
-		List<MicroElementTopologyEntity> elementTopologyEntities=new ArrayList<MicroElementTopologyEntity>();
-		
-		elementTopologyEntities.add(creatreElement(0,null,1,2,3));
-		elementTopologyEntities.add(creatreElement(1,0,3,4));
-		elementTopologyEntities.add(creatreElement(2,0,5,6,7));
-		elementTopologyEntities.add(creatreElement(3,1));
-		elementTopologyEntities.add(creatreElement(4,1));
-		elementTopologyEntities.add(creatreElement(5,2,8));
-		elementTopologyEntities.add(creatreElement(6,2,8));
-		elementTopologyEntities.add(creatreElement(7,2,8));
-		
-		elementTopologyEntities.add(creatreElement(8,3,5,6,7));
-		
-		Gson gson=new Gson();
+		List<MicroElementTopologyEntity> elementTopologyEntities = new ArrayList<MicroElementTopologyEntity>();
+
+		elementTopologyEntities.add(createElement(0,null,1,2,3));
+		elementTopologyEntities.add(createElement(1,0,3,4));
+		elementTopologyEntities.add(createElement(2,0,5,6,7));
+		elementTopologyEntities.add(createElement(3,1));
+		elementTopologyEntities.add(createElement(4,1));
+		elementTopologyEntities.add(createElement(5,2,8));
+		elementTopologyEntities.add(createElement(6,2,8));
+		elementTopologyEntities.add(createElement(7,2,8));
+		elementTopologyEntities.add(createElement(8,3,5,6,7));
+
+		Gson gson = new Gson();
 		String json = gson.toJson(elementTopologyEntities);
 		System.out.println(json);
-		
 	}
 	
 	@Test
 	public void convertToClass() {
 		InputStream resource = this.getClass().getClassLoader().getResourceAsStream("MELTopology.json");
-		Gson gson=new Gson();
-		Type ty=new TypeToken<List<MicroElementTopologyEntity>>() {}.getType();
-		List<MicroElementTopologyEntity> fromJson = gson.fromJson(new JsonReader(new InputStreamReader(resource)),ty);
-		
+		Gson gson = new Gson();
+		Type ty = new TypeToken<List<MicroElementTopologyEntity>>() {}.getType();
+		List<MicroElementTopologyEntity> fromJson = gson.fromJson(new JsonReader(new InputStreamReader(resource)), ty);
+
 		System.out.println(fromJson);
-		
 	}
 	
-	private MicroElementTopologyEntity creatreElement(Integer id,Integer upLinkID,Integer... downlinkIDs) {
-		MicroElementTopologyEntity elementTopologyEntity=new MicroElementTopologyEntity();
-		List<Integer> downLinkIds=new ArrayList<>();
+	private MicroElementTopologyEntity createElement(Integer id, Integer upLinkID, Integer... downlinkIDs) {
+		MicroElementTopologyEntity elementTopologyEntity = new MicroElementTopologyEntity();
+
+		List<Integer> downLinkIds = new ArrayList<>();
 		for (Integer downLinkId : downlinkIDs) {
 			downLinkIds.add(downLinkId);
 		}
 	    elementTopologyEntity.setDownLinkIds(downLinkIds);
 		elementTopologyEntity.setId(id);
 		elementTopologyEntity.setUpLinkId(upLinkID);
+
 		return elementTopologyEntity;
 	}
 }

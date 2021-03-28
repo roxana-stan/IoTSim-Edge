@@ -8,13 +8,13 @@ public class Simulator {
 
 	private static Simulator simulator = new Simulator();
 
-	private List<IoTDevice> loTDevices;
+	private List<IoTDevice> iotDevices;
 	
 	private Simulator() {
-		loTDevices = new ArrayList<>();
+		iotDevices = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
-//			TemperatureSensor sensor=new TemperatureSensor(i);
-//			loTDevices.add(sensor);
+//			TemperatureSensor sensor = new TemperatureSensor(i);
+//			iotDevices.add(sensor);
     	}
     }
 
