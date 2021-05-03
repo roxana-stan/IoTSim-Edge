@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletScheduler;
-//import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
@@ -94,10 +93,9 @@ public class Example3 {
 		LogUtil.info("Config of IoT Battery" + indent + edgeDevices.get(0).getBattery().getCurrentCapacity());
 		CloudSim.startSimulation();
 
-
 		List<Cloudlet> cloudletReceivedList = broker.getCloudletReceivedList();
+		printCloudletList(cloudletReceivedList, melList, datacenters);
 
-		printCloudletList(cloudletReceivedList, melList,datacenters);
 		LogUtil.simulationFinished();
 	}
 	
@@ -127,7 +125,7 @@ public class Example3 {
 			if (microELement.getUpLink() == null)
 				throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
 			}
-			
+
 			List<Integer> downLinkIds = topologyEntity.getDownLinkIds();
 			downLinkIds.remove(null);
 			List<MicroELement> downLink=new ArrayList<>();
@@ -135,23 +133,23 @@ public class Example3 {
 			for (Integer downLinkID : downLinkIds) {
 				//find the MEL having the same downLinkID
 				//and set the MEL to  microELement
-			
+
 				boolean found=false;
 				inner: for (MicroELement elm : vmList) {
 					if (elm.getId() == downLinkID) {
 						if (downLink.contains(elm)) {
-							throw new IllegalAccessError("the EML: " + id + "cannot bind the same downlink twice");							
+							throw new IllegalAccessError("the EML: " + id + " cannot bind the same downlink twice");							
 						}
 						downLink.add(elm);
 						found = true;
 						break inner;
 					} else 
-					if (downLinkID == id) {
-						throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
-					}
+						if (downLinkID == id) {
+							throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
+						}
 				}
 				if (!found) {
-					throw new IllegalAccessError("cannot find the downlink: " + downLinkID + "for EML " + id);
+					throw new IllegalAccessError("cannot find the downlink: " + downLinkID + " for EML " + id);
 				}
 			}
 		}
@@ -196,7 +194,7 @@ public class Example3 {
 			
 			//LogUtil.info(edgeLet = list.get());
 			System.out.println("HostList" + datacenters.get(0).getHostList().size());
-		
+
 			EdgeDevice e = (EdgeDevice)datacenters.get(0).getHostList().get(0);
 			LogUtil.info(" EdgeDevice Consumed energy, " + " Time " + edgeLet.getFinishTime());
 			//LogUtil.info(edgeLet = list.get());
@@ -299,7 +297,7 @@ public class Example3 {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return vms;
 	}
 
@@ -322,7 +320,7 @@ public class Example3 {
 
 		return devices;
 	}
-	
+
 	/**
 	 * Create data center.
 	 * @param conf
@@ -380,26 +378,26 @@ public class Example3 {
 
 				ramconstructor = Class.forName(ramProvisionerEntity.getClassName()).getConstructor(int.class);
 
-				RamProvisioner ramProvisioner=(RamProvisioner) ramconstructor.newInstance(ramProvisionerEntity.getRamSize());
+				RamProvisioner ramProvisioner = (RamProvisioner) ramconstructor.newInstance(ramProvisionerEntity.getRamSize());
 
 				BwProvisionerEntity bwProvisionerEntity = hostEntity.getBwProvisioner();
 				Constructor<?> bwconstructor = Class.forName(bwProvisionerEntity.getClassName()).getConstructor(double.class);
-				BwProvisioner bwProvisioner=(BwProvisioner) bwconstructor.newInstance(bwProvisionerEntity.getBwSize());
+				BwProvisioner bwProvisioner = (BwProvisioner) bwconstructor.newInstance(bwProvisionerEntity.getBwSize());
 				VmSchedulerEntity vmSchedulerEntity = hostEntity.getVmScheduler();
 				String vmSchedulerClassName = vmSchedulerEntity.getClassName();
 				VmScheduler vmScheduler = (VmScheduler) Class.forName(vmSchedulerClassName).getConstructor(List.class).newInstance(peList);
 				MobilityEntity geo_location = hostEntity.getGeo_location();
-				Mobility location=new Mobility(geo_location.getLocation());
-				location.movable=geo_location.isMovable();
-				location.signalRange=geo_location.getSignalRange();
+				Mobility location = new Mobility(geo_location.getLocation());
+				location.movable = geo_location.isMovable();
+				location.signalRange = geo_location.getSignalRange();
 				if (geo_location.isMovable()) {
-					location.volecity=geo_location.getVolecity();
+					location.volecity = geo_location.getVolecity();
 				}
 
-				EdgeDevice edgeDevice = new EdgeDevice(hostEntity.getId(),ramProvisioner,bwProvisioner,hostEntity.getStorage(),peList,
-						vmScheduler,this.getEdgeType(hostEntity.getEdgeType()),networkModel,
-						hostEntity.getMax_IoTDevice_capacity(),hostEntity.getMax_battery_capacity(),
-						hostEntity.getBattery_drainage_rate(),hostEntity.getCurrent_battery_capacity());
+				EdgeDevice edgeDevice = new EdgeDevice(hostEntity.getId(), ramProvisioner, bwProvisioner, hostEntity.getStorage(), peList,
+						vmScheduler, this.getEdgeType(hostEntity.getEdgeType()), networkModel,
+						hostEntity.getMax_IoTDevice_capacity(), hostEntity.getMax_battery_capacity(),
+						hostEntity.getBattery_drainage_rate(), hostEntity.getCurrent_battery_capacity());
 				edgeDevice.setMobility(location);
 
 				hostList.add(edgeDevice);
@@ -412,8 +410,7 @@ public class Example3 {
 		// 2. A Machine contains one or more PEs or CPUs/Cores.
 		// In this example, it will have only one core.
 
-		// 4. Create Host with its id and list of PEs and add them to the list
-		// of machines
+		// 4. Create Host with its id and list of PEs and add them to the list of machines
 
 		/*String arch = "x86"; // system architecture
 		String os = "Linux"; // operating system
@@ -445,7 +442,7 @@ public class Example3 {
 		LinkedList<Storage> storageList = new LinkedList<Storage>();
 		List<String> ioTDeviceClassNameSupported = characteristicsEntity.getIoTDeviceClassNameSupported();
 		Class[] ioTDeviceClassSupported=new Class[ioTDeviceClassNameSupported.size()];
-		int i=0;
+		int i = 0;
 		for (String string : ioTDeviceClassNameSupported) {
 			try {
 				ioTDeviceClassSupported[i]=Class.forName(string);
@@ -457,23 +454,23 @@ public class Example3 {
 		}
 		List<String> communicationNameSupported = characteristicsEntity.getCommunicationProtocolSupported();
 		Class[] communicationClassSupported=new Class[communicationNameSupported.size()];
-		i=0;
+		i = 0;
 		for (String name : communicationNameSupported) {
 			switch(name.toLowerCase()) {
 			case "xmpp":
-				communicationClassSupported[i]=XMPPProtocol.class;
+				communicationClassSupported[i] = XMPPProtocol.class;
 				break;
 			case "coap":
-				communicationClassSupported[i]=CoAPProtocol.class;
+				communicationClassSupported[i] = CoAPProtocol.class;
 				break;
 			case "amqp":
-				communicationClassSupported[i]=AMQPProtocol.class;
+				communicationClassSupported[i] = AMQPProtocol.class;
 				break;
 			case "mqtt":
-				communicationClassSupported[i]=MQTTProtocol.class;
+				communicationClassSupported[i] = MQTTProtocol.class;
 				break;
 			default:
-				System.out.println("the protocol " +name+" has not been supported yet!");
+				System.out.println("The protocol " + name + " has not been supported yet!");
 			}
 			i++;
 		}
@@ -484,10 +481,8 @@ public class Example3 {
 				ioTDeviceClassSupported);
 
 
-
 		// Here are the steps needed to create a PowerDatacenter:
-		// 1. We need to create a list to store
-		// our machine
+		// 1. We need to create a list to store our machine
 
 
 		VmAllcationPolicyEntity vmAllcationPolicyEntity = entity.getVmAllocationPolicy();
@@ -497,8 +492,7 @@ public class Example3 {
 		EdgeDataCenter datacenter = null;
 		try {
 			VmAllocationPolicy vmAllocationPolicy = (VmAllocationPolicy)Class.forName(className).getConstructor(List.class).newInstance(hostList);
-			datacenter = new EdgeDataCenter(entity.getName(), characteristics,vmAllocationPolicy,
-					storageList, entity.getSchedulingInterval());
+			datacenter = new EdgeDataCenter(entity.getName(), characteristics,vmAllocationPolicy, storageList, entity.getSchedulingInterval());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -506,32 +500,29 @@ public class Example3 {
 		return datacenter;
 	}
 
-	private EdgeType getEdgeType(String edgeType) {
-		String upperCase = edgeType.toUpperCase();
-		EdgeType edgeType2=null;
-		switch(upperCase) {
+	private EdgeType getEdgeType(String edgeTypeString) {
+		EdgeType edgeType = null;
+		
+		String edgeTypeUpperCaseString = edgeTypeString.toUpperCase();
+		switch(edgeTypeUpperCaseString) {
 		case "RASPBERRY_PI":
-			edgeType2 = EdgeType.RASPBERRY_PI;
+			edgeType = EdgeType.RASPBERRY_PI;
 			break;
-
 		case "SMART_ROUTER":
-			edgeType2 = EdgeType.SMART_ROUTER;
+			edgeType = EdgeType.SMART_ROUTER;
 			break;
-
 		case "UDOO_BOARD":
-			edgeType2 = EdgeType.UDOO_BOARD;
+			edgeType = EdgeType.UDOO_BOARD;
 			break;
-
 		case "MOBILE_PHONE":
-			edgeType2 = EdgeType.MOBILE_PHONE;
+			edgeType = EdgeType.MOBILE_PHONE;
 			break;
-
 		default:
-			System.out.println("the EdgeDevice type " + edgeType + " has not been supported yet!");
+			System.out.println("The edge device type " + edgeTypeString + " has not been supported yet!");
 			break;
 		}
 
-		return edgeType2;
+		return edgeType;
 	}
 
 	private List<Pe> getPeList(List<PeEntity> peEntities) {
@@ -615,9 +606,10 @@ public class Example3 {
 			communicationProtocol = new AMQPProtocol();
 			break;
 		default:
-			System.out.println("have not supported protocol " + communicationProtocol + " yet!");
+			System.out.println("Have not supported protocol " + communicationProtocol + " yet!");
 			return null;
 		}
+
 		String networkTypeName = networkModelEntity.getNetworkType();
 		networkTypeName = networkTypeName.toLowerCase();
 		NetworkType networkType = null;
@@ -641,7 +633,7 @@ public class Example3 {
 			networkType = NetworkType.LAN;
 			break;
 		default:
-			System.out.println("have not supported network type " + networkTypeName + " yet!");
+			System.out.println("Have not supported network type " + networkTypeName + " yet!");
 			return null;
 		}
 

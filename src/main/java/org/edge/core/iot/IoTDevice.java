@@ -295,7 +295,7 @@ public abstract class IoTDevice extends SimEntity {
 
 		if (this.attachedEdgeDeviceVMId == -1) {
 			this.setEnabled(false);
-			LogUtil.info("there is no target edge device connected to this IoT: " + this.getId());
+			LogUtil.info("There is no target edge device connected to this IoT: " + this.getId());
 			return false;
 		}
 		return true;
@@ -345,13 +345,13 @@ public abstract class IoTDevice extends SimEntity {
 	}
 
 	protected void updateGeolocation() {
-		if (this.movingPolicy!=null) {
-			//this.getMobility().location.x=this.getMobility().location.x+this.getMobility().volecity;
+		if (this.movingPolicy != null) {
+			//this.getMobility().location.x = this.getMobility().location.x + this.getMobility().volecity;
 			LogUtil.info(this.getClass().getSimpleName() + " " + this.getId() + " Location is:" + this.getMobility().location.x);
 			this.movingPolicy.updateLocation(this.getMobility());
 		} else {
-			this.movingPolicy=new SimpleMovingPolicy();
-			//this.getMobility().location.x=this.getMobility().location.x+this.getMobility().volecity;
+			this.movingPolicy = new SimpleMovingPolicy();
+			//this.getMobility().location.x = this.getMobility().location.x + this.getMobility().volecity;
 			LogUtil.info(this.getClass().getSimpleName() + " " + this.getId() + " Location is:" + this.getMobility().location.x);
 			this.movingPolicy.updateLocation(this.mobility);
 		}
@@ -374,12 +374,12 @@ public abstract class IoTDevice extends SimEntity {
 
 		case EdgeState.REQUEST_CONNECTION:
 			ConnectionHeader info = (ConnectionHeader) ev.getData();
-			LogUtil.info("received request for connection from broker" + info.brokeId);
+			LogUtil.info("Received request for connection from broker " + info.brokeId);
 			info.sourceId = info.ioTId;
 			if (this.attachedEdgeDeviceVMId == NULL_DEVICE) {
 				this.brokerId = info.brokeId;
 				info.state = EdgeState.SUCCESS;
-				LogUtil.info("ack request to broker " + info.brokeId);
+				LogUtil.info("Ack request to broker " + info.brokeId);
 				this.send(info.brokeId, this.getNetworkDelay(), EdgeState.CONNECTING_ACK, info);
 			} else {
 				info.state = EdgeState.FAILURE;
@@ -515,7 +515,7 @@ public abstract class IoTDevice extends SimEntity {
 	}
 
 	/**
-	 * if this device can actuate, then override this method
+	 * If this device can actuate, then override this method
 	 */
 	public void actuating(SimEvent ev) {
 		boolean updateBatteryByActuating = this.updateBatteryByActuating(this.battery);
@@ -526,7 +526,7 @@ public abstract class IoTDevice extends SimEntity {
 		} else {
 			if (isEnabled()) {
 				EdgeLet edgeLet = (EdgeLet) ev.getData();
-				LogUtil.info("Inside IoT " + this.assigmentIoTId + "edgelet" + edgeLet.getCloudletId() + "edgelet length" + edgeLet.getCloudletLength());
+				LogUtil.info("Inside IoT " + this.assigmentIoTId + " edgelet " + edgeLet.getCloudletId() + " edgelet length " + edgeLet.getCloudletLength());
 				LogUtil.info(CloudSim.clock() + " " + this.getClass().getSimpleName() + " " + this.getId()
 							+ " received processed edgelet " + edgeLet.getCloudletId() + " from VM " + edgeLet.getVmId() + " and start actuating");
 			} else {

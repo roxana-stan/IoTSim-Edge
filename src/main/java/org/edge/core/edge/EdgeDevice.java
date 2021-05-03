@@ -139,16 +139,16 @@ public class EdgeDevice extends Host {
 	
 	public void updateBatteryByProcessingCloudLetAndSend(double fileSize, double shrinkFactor, double drangeRateForProcess, double drangeRateForSending) {
 		//LogUtil.info(battery.getMaxCapacity() + " " + battery.getCurrentCapacity() + " " + battery_drainage_rate);
-		
-		double updateByProcess = fileSize*(1-shrinkFactor)*drangeRateForProcess;
-		double updateBySending = fileSize*shrinkFactor*drangeRateForSending;
-		
+
+		double updateByProcess = fileSize * (1-shrinkFactor) * drangeRateForProcess;
+		double updateBySending = fileSize * shrinkFactor * drangeRateForSending;
+
 		LogUtil.info("Edge device " + this.getId() + " -  " + this.getVmList().get(0).getId()
 					+ " ( updateByProcess = " + updateByProcess + " )" + " ( updateBySending = " + updateBySending + " )");
 		this.battery.setCurrentCapacity(this.battery.getCurrentCapacity()-(updateByProcess+updateBySending));
-		
+
 		if (this.battery.getCurrentCapacity() <= 0) {
-			LogUtil.info("Edge device " +  this.getId() + "( VM " + this.getVmList().get(0).getId() + " )" + "'s battery has drained");
+			LogUtil.info("Edge device " + this.getId() + "( VM " + this.getVmList().get(0).getId() + " )" + "'s battery has drained");
 			this.setEnabled(false);
 			CloudSim.terminateSimulation();
 		}
@@ -156,20 +156,20 @@ public class EdgeDevice extends Host {
 
 	public void updateBatteryByProcessingCloudLetAndSend2(double fileSize, double shrinkFactor, double drangeRateForProcess, double drangeRateForSending) {
 		//LogUtil.info(battery.getMaxCapacity() + " " + battery.getCurrentCapacity() + " " + battery_drainage_rate);
-		
-		double updateByProcess = fileSize*(1-shrinkFactor)*drangeRateForProcess;
-		double updateBySending = fileSize*shrinkFactor*drangeRateForSending;
-		
+
+		double updateByProcess = fileSize * (1-shrinkFactor) * drangeRateForProcess;
+		double updateBySending = fileSize * shrinkFactor * drangeRateForSending;
+
 		LogUtil.info("Edge device " + this.getId() + " -  " + this.getVmList().get(0).getId()
 					+ " ( updateByProcess = " + updateByProcess + " )" + " ( updateBySending = " + updateBySending + " )");
 		this.battery.setCurrentCapacity(this.battery.getCurrentCapacity()-(updateByProcess+updateBySending));
-		
+
 		if (this.battery.getCurrentCapacity() <= 0) {
 			LogUtil.info("Edge device " + this.getId() + "( VM " + this.getVmList().get(0).getId() + " )" + "'s battery has drained");
 			this.setEnabled(false);
 		}
 	}
-	
+
 	/**
 	 * Edge-to-edge communication:
 	 * when the edge device cannot get connected with the previous IoT device,

@@ -485,8 +485,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 					this.getNetworkDelay(new DevicesInfo(connectionInfo.ioTId, connectionInfo.vmId)),
 					EdgeState.CONNECTION_ESTABLISHED, connectionInfo);
 		} else {
-			LogUtil.info(
-					"VM" + connectionInfo.vmId + " doesn't accept this connection from IoT " + connectionInfo.ioTId);
+			LogUtil.info("VM " + connectionInfo.vmId + " doesn't accept this connection from IoT " + connectionInfo.ioTId);
 		}
 	}
 

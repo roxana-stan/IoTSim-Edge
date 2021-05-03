@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletScheduler;
-//import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
@@ -140,18 +139,18 @@ public class Example2A {
 				inner: for (MicroELement elm : vmList) {
 					if (elm.getId() == downLinkID) {
 						if (downLink.contains(elm)) {
-							throw new IllegalAccessError("the EML: " + id + "cannot bind the same downlink twice");							
+							throw new IllegalAccessError("the EML: " + id + " cannot bind the same downlink twice");							
 						}
 						downLink.add(elm);
 						found = true;
 						break inner;
 					} else 
-					if (downLinkID == id) {
-						throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
-					}
+						if (downLinkID == id) {
+							throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
+						}
 				}
 				if (!found) {
-					throw new IllegalAccessError("cannot find the downlink: " + downLinkID + "for EML " + id);
+					throw new IllegalAccessError("cannot find the downlink: " + downLinkID + " for EML " + id);
 				}			
 			}
 		}
@@ -242,7 +241,7 @@ public class Example2A {
 	 * @param brokerId
 	 * @return
 	 */
-	private List<ConnectionHeader>   setUpConnection(ConfiguationEntity conf, List<IoTDevice> edgeDevices, int brokerId) {
+	private List<ConnectionHeader> setUpConnection(ConfiguationEntity conf, List<IoTDevice> edgeDevices, int brokerId) {
 		List<ConnectionHeader> header = new ArrayList<>();
 		
 		List<ConnectionEntity> connections = conf.getConnections();
@@ -470,7 +469,7 @@ public class Example2A {
 				communicationClassSupported[i]=MQTTProtocol.class;
 				break;
 			default:
-				System.out.println("the protocol " +name+" has not been supported yet!");
+				System.out.println("The protocol " + name + " has not been supported yet!");
 			}
 			i++;
 		}
@@ -481,11 +480,8 @@ public class Example2A {
 				ioTDeviceClassSupported);
 
 
-
 		// Here are the steps needed to create a PowerDatacenter:
-		// 1. We need to create a list to store
-		// our machine
-
+		// 1. We need to create a list to store our machine
 
 		VmAllcationPolicyEntity vmAllcationPolicyEntity = entity.getVmAllocationPolicy();
 		String className = vmAllcationPolicyEntity.getClassName();
@@ -524,7 +520,7 @@ public class Example2A {
 			break;
 
 		default:
-			System.out.println("the EdgeDevice type " + edgeType + " has not been supported yet!");
+			System.out.println("The edge device type " + edgeType + " has not been supported yet!");
 			break;
 		}
 

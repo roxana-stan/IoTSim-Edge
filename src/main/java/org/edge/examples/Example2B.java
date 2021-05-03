@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletScheduler;
-//import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
@@ -82,7 +81,7 @@ public class Example2B {
 		List<MicroELement> melList = this.createMEL(conf, broker);
 		List<ConnectionHeader> header = this.setUpConnection(conf, edgeDevices, broker.getId());
 		
-		this.buildupEMLConnection(melList,conf.getMELEntities());			
+		this.buildupEMLConnection(melList, conf.getMELEntities());			
 	
 		broker.submitVmList(melList);
 		broker.submitConnection(header);
@@ -93,10 +92,9 @@ public class Example2B {
 		LogUtil.info("Number of IoT " + indent + edgeDevices.size());
 		LogUtil.info("Config of IoT Battery" + indent + edgeDevices.get(0).getBattery().getCurrentCapacity());
 		CloudSim.startSimulation();
-		
-		
+
 		List<Cloudlet> cloudletReceivedList = broker.getCloudletReceivedList();
-		
+
 		printCloudletList(cloudletReceivedList, melList,datacenters);
 		LogUtil.simulationFinished();
 	}
@@ -106,13 +104,13 @@ public class Example2B {
 		for (MicroELement microELement : vmList) {
 			int id = microELement.getId();
 			MicroElementTopologyEntity topologyEntity = null;
-			inner :for ( MELEntities to : vmEntities) {
+			inner: for (MELEntities to : vmEntities) {
 				if (to.getMELTopology().getId() == id) {
-					topologyEntity=to.getMELTopology();
+					topologyEntity = to.getMELTopology();
 					break inner; 
 				}
 			}
-			
+
 			if (topologyEntity == null)
 				throw new MicroElementNotFoundException("cannot find topology for MicroElement " + id);
 			//find uplink and bind it
@@ -124,8 +122,8 @@ public class Example2B {
 						break inner;
 					}
 				}
-			if (microELement.getUpLink() == null)
-				throw new MicroElementNotFoundException("cannot find uplink "+upLinkId+" for MicroElement " + id);
+				if (microELement.getUpLink() == null)
+					throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
 			}
 			
 			List<Integer> downLinkIds = topologyEntity.getDownLinkIds();
@@ -135,23 +133,23 @@ public class Example2B {
 			for (Integer downLinkID : downLinkIds) {
 				//find the MEL having the same downLinkID
 				//and set the MEL to  microELement
-			
+
 				boolean found = false;
 				inner: for (MicroELement elm : vmList) {
 					if (elm.getId() == downLinkID) {
 						if (downLink.contains(elm)) {
-							throw new IllegalAccessError("the EML: " + id + "cannot bind the same downlink twice");							
+							throw new IllegalAccessError("the EML: " + id + " cannot bind the same downlink twice");							
 						}
 						downLink.add(elm);
 						found = true;
 						break inner;
-					} else 
-					if (downLinkID == id) {
-						throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
-					}
+					} else
+						if (downLinkID == id) {
+							throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
+						}
 				}
 				if (!found) {
-					throw new IllegalAccessError("cannot find the downlink: " + downLinkID + "for EML " + id);
+					throw new IllegalAccessError("cannot find the downlink: " + downLinkID + " for EML " + id);
 				}		
 			}
 		}
@@ -267,7 +265,7 @@ public class Example2B {
 	 */
 	private List<MicroELement> createMEL(ConfiguationEntity conf, EdgeDataCenterBroker broker) {
 		List<MicroELement> vms = new ArrayList<>();
-		
+
 		List<MELEntities> melEntities = conf.getMELEntities();
 		for (MELEntities melEntity : melEntities) {
 			String cloudletSchedulerClassName = melEntity.getCloudletSchedulerClassName();
@@ -276,7 +274,7 @@ public class Example2B {
 				String edgeOperationStr = melEntity.getEdgeOperationClass();
 				EdgeOperation edgeOperation = (EdgeOperation) Class.forName(edgeOperationStr).newInstance();
 
-				
+
 				cloudletScheduler = (CloudletScheduler) Class.forName(cloudletSchedulerClassName).newInstance();
 				float datasizeShrinkFactor = melEntity.getDatasizeShrinkFactor();
 				String type = melEntity.getType();
@@ -316,7 +314,7 @@ public class Example2B {
 		
 		return devices;
 	}
-	
+
 	/**
 	 * Create data center.
 	 * 
@@ -334,7 +332,7 @@ public class Example2B {
 
 		return datacenters;
 	}
-	
+
 	/**
 	 * Initialize CloudSim.
 	 * @param conf
@@ -441,7 +439,7 @@ public class Example2B {
 		LinkedList<Storage> storageList = new LinkedList<Storage>();
 		List<String> ioTDeviceClassNameSupported = characteristicsEntity.getIoTDeviceClassNameSupported();
 		Class[] ioTDeviceClassSupported = new Class[ioTDeviceClassNameSupported.size()];
-		int i=0;
+		int i = 0;
 		for (String string : ioTDeviceClassNameSupported) {
 			try {
 				ioTDeviceClassSupported[i]=Class.forName(string);
@@ -453,7 +451,7 @@ public class Example2B {
 		}
 		List<String> communicationNameSupported = characteristicsEntity.getCommunicationProtocolSupported();
 		Class[] communicationClassSupported = new Class[communicationNameSupported.size()];
-		i=0;
+		i = 0;
 		for (String name : communicationNameSupported) {
 			switch(name.toLowerCase()) {
 			case "xmpp":
@@ -469,7 +467,7 @@ public class Example2B {
 				communicationClassSupported[i] = MQTTProtocol.class;
 				break;
 			default:
-				System.out.println("the protocol " +name+" has not been supported yet!");
+				System.out.println("The protocol " + name + " has not been supported yet!");
 			}
 			i++;
 		}
@@ -480,8 +478,7 @@ public class Example2B {
 
 
 		// Here are the steps needed to create a PowerDatacenter:
-		// 1. We need to create a list to store
-		// our machine
+		// 1. We need to create a list to store our machine
 
 
 		VmAllcationPolicyEntity vmAllcationPolicyEntity = entity.getVmAllocationPolicy();
@@ -491,8 +488,7 @@ public class Example2B {
 		EdgeDataCenter datacenter = null;
 		try {
 			VmAllocationPolicy vmAllocationPolicy = (VmAllocationPolicy)Class.forName(className).getConstructor(List.class).newInstance(hostList);
-			datacenter = new EdgeDataCenter(entity.getName(), characteristics,vmAllocationPolicy,
-					storageList, entity.getSchedulingInterval());
+			datacenter = new EdgeDataCenter(entity.getName(), characteristics, vmAllocationPolicy, storageList, entity.getSchedulingInterval());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -522,7 +518,7 @@ public class Example2B {
 			break;
 
 		default:
-			System.out.println("the edgeDevice type "+edgeType+" has not been supported yet!");
+			System.out.println("The edge device type " + edgeType + " has not been supported yet!");
 			break;
 		}
 
@@ -610,9 +606,10 @@ public class Example2B {
 			communicationProtocol = new AMQPProtocol();
 			break;
 		default:
-			System.out.println("have not supported protocol " + communicationProtocol + " yet!");
+			System.out.println("Have not supported protocol " + communicationProtocol + " yet!");
 			return null;
 		}
+
 		String networkTypeName = networkModelEntity.getNetworkType();
 		networkTypeName = networkTypeName.toLowerCase();
 		NetworkType networkType = null;
@@ -636,7 +633,7 @@ public class Example2B {
 			networkType = NetworkType.LAN;
 			break;
 		default:
-			System.out.println("have not supported network type " + networkTypeName + " yet!");
+			System.out.println("Have not supported network type " + networkTypeName + " yet!");
 			return null;
 		}
 
