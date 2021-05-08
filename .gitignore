@@ -8,3 +8,7 @@ target/
 
 # Mac
 .DS_Store
+
+# Custom
+src/main/java/scheduling_algorithms
+src/main/java/scheduling_evaluation

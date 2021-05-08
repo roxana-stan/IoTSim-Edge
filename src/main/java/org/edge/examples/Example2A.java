@@ -275,7 +275,6 @@ public class Example2A {
 				String edgeOperationStr = melEntity.getEdgeOperationClass();
 				EdgeOperation edgeOperation = (EdgeOperation) Class.forName(edgeOperationStr).newInstance();
 
-				
 				cloudletScheduler = (CloudletScheduler) Class.forName(cloudletSchedulerClassName).newInstance();
 				float datasizeShrinkFactor = melEntity.getDatasizeShrinkFactor();
 				String type = melEntity.getType();
@@ -323,7 +322,7 @@ public class Example2A {
 	 */
 	private List<EdgeDataCenter> createDataCenter(ConfiguationEntity conf) {
 		List<EdgeDataCenter> datacenters = new ArrayList<>();
-		
+
 		List<EdgeDataCenterEntity> edgeDatacenterEntities = conf.getEdgeDatacenter();
 		for (EdgeDataCenterEntity edgeDataCenterEntity : edgeDatacenterEntities) {
 			EdgeDataCenter createEdgeDatacenter = this.createEdgeDatacenter(edgeDataCenterEntity);
@@ -374,19 +373,19 @@ public class Example2A {
 
 				ramconstructor = Class.forName(ramProvisionerEntity.getClassName()).getConstructor(int.class);
 
-				RamProvisioner ramProvisioner=(RamProvisioner) ramconstructor.newInstance(ramProvisionerEntity.getRamSize());
+				RamProvisioner ramProvisioner = (RamProvisioner) ramconstructor.newInstance(ramProvisionerEntity.getRamSize());
 
 				BwProvisionerEntity bwProvisionerEntity = hostEntity.getBwProvisioner();
 				Constructor<?> bwconstructor = Class.forName(bwProvisionerEntity.getClassName()).getConstructor(double.class);
-				BwProvisioner bwProvisioner=(BwProvisioner) bwconstructor.newInstance(bwProvisionerEntity.getBwSize());
+				BwProvisioner bwProvisioner = (BwProvisioner) bwconstructor.newInstance(bwProvisionerEntity.getBwSize());
 				VmSchedulerEntity vmSchedulerEntity = hostEntity.getVmScheduler();
 				String vmSchedulerClassName = vmSchedulerEntity.getClassName();
 				VmScheduler vmScheduler = (VmScheduler) Class.forName(vmSchedulerClassName).getConstructor(List.class).newInstance(peList);
 				MobilityEntity geo_location = hostEntity.getGeo_location();
-				Mobility location=new Mobility(geo_location.getLocation());
-				location.movable=geo_location.isMovable();
-				location.signalRange=geo_location.getSignalRange();
-				if(geo_location.isMovable()) {
+				Mobility location = new Mobility(geo_location.getLocation());
+				location.movable = geo_location.isMovable();
+				location.signalRange = geo_location.getSignalRange();
+				if (geo_location.isMovable()) {
 					location.volecity=geo_location.getVolecity();
 				}
 
@@ -397,8 +396,6 @@ public class Example2A {
 				edgeDevice.setMobility(location);
 
 				hostList.add(edgeDevice);
-			
-			
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -408,8 +405,7 @@ public class Example2A {
 		// 2. A Machine contains one or more PEs or CPUs/Cores.
 		// In this example, it will have only one core.
 
-		// 4. Create Host with its id and list of PEs and add them to the list
-		// of machines
+		// 4. Create Host with its id and list of PEs and add them to the list of machines
 
 		/*String arch = "x86"; // system architecture
 		String os = "Linux"; // operating system
@@ -440,8 +436,8 @@ public class Example2A {
 		double costPerBw = characteristicsEntity.getCostPerBw();
 		LinkedList<Storage> storageList = new LinkedList<Storage>();
 		List<String> ioTDeviceClassNameSupported = characteristicsEntity.getIoTDeviceClassNameSupported();
-		Class[] ioTDeviceClassSupported=new Class[ioTDeviceClassNameSupported.size()];
-		int i=0;
+		Class[] ioTDeviceClassSupported = new Class[ioTDeviceClassNameSupported.size()];
+		int i = 0;
 		for (String string : ioTDeviceClassNameSupported) {
 			try {
 				ioTDeviceClassSupported[i]=Class.forName(string);
@@ -452,21 +448,21 @@ public class Example2A {
 			i++;
 		}
 		List<String> communicationNameSupported = characteristicsEntity.getCommunicationProtocolSupported();
-		Class[] communicationClassSupported=new Class[communicationNameSupported.size()];
-		i=0;
+		Class[] communicationClassSupported = new Class[communicationNameSupported.size()];
+		i = 0;
 		for (String name : communicationNameSupported) {
 			switch(name.toLowerCase()) {
 			case "xmpp":
-				communicationClassSupported[i]=XMPPProtocol.class;
+				communicationClassSupported[i] = XMPPProtocol.class;
 				break;
 			case "coap":
-				communicationClassSupported[i]=CoAPProtocol.class;
+				communicationClassSupported[i] = CoAPProtocol.class;
 				break;
 			case "amqp":
-				communicationClassSupported[i]=AMQPProtocol.class;
+				communicationClassSupported[i] = AMQPProtocol.class;
 				break;
 			case "mqtt":
-				communicationClassSupported[i]=MQTTProtocol.class;
+				communicationClassSupported[i] = MQTTProtocol.class;
 				break;
 			default:
 				System.out.println("The protocol " + name + " has not been supported yet!");
@@ -568,16 +564,16 @@ public class Example2A {
 				newInstance.setBatteryDrainageRate(iotDeviceEntity.getBattery_drainage_rate());
 				newInstance.getBattery().setMaxCapacity(iotDeviceEntity.getMax_battery_capacity());
 				newInstance.getBattery().setCurrentCapacity(iotDeviceEntity.getMax_battery_capacity());
-				Mobility location=new Mobility(iotDeviceEntity.getMobilityEntity().getLocation());
-				location.movable=iotDeviceEntity.getMobilityEntity().isMovable();
+				Mobility location = new Mobility(iotDeviceEntity.getMobilityEntity().getLocation());
+				location.movable = iotDeviceEntity.getMobilityEntity().isMovable();
 				if(iotDeviceEntity.getMobilityEntity().isMovable()) {
-					location.range=new MovingRange(iotDeviceEntity.getMobilityEntity().getRange().beginX,
+					location.range = new MovingRange(iotDeviceEntity.getMobilityEntity().getRange().beginX,
 							iotDeviceEntity.getMobilityEntity().getRange().endX);
-					location.signalRange=iotDeviceEntity.getMobilityEntity().getSignalRange();
-					location.volecity=iotDeviceEntity.getMobilityEntity().getVolecity();
+					location.signalRange = iotDeviceEntity.getMobilityEntity().getSignalRange();
+					location.volecity = iotDeviceEntity.getMobilityEntity().getVolecity();
 				}
 				newInstance.setMobility(location);
-				
+
 				devices.add(newInstance);
 			}
 

@@ -199,7 +199,7 @@ public class Example1 {
 
 		LogUtil.info("End-exp");
 	}
-	
+
 	/**
 	 * log initialization
 	 *

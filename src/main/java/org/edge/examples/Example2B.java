@@ -80,9 +80,9 @@ public class Example2B {
 		List<EdgeDataCenter> datacenters = this.createDataCenter(conf);
 		List<MicroELement> melList = this.createMEL(conf, broker);
 		List<ConnectionHeader> header = this.setUpConnection(conf, edgeDevices, broker.getId());
-		
+
 		this.buildupEMLConnection(melList, conf.getMELEntities());			
-	
+
 		broker.submitVmList(melList);
 		broker.submitConnection(header);
 
@@ -187,18 +187,18 @@ public class Example2B {
 						+ edgeLet.getCloudletFileSize());
 			}
 		}
-	
+
 
 		edgeLet = list.get(list.size()-1);
 		edgeLet.getUtilizationModelRam().getUtilization(0);
-			
+
 		//LogUtil.info(edgeLet = list.get());
-		
+
 		EdgeDevice e = (EdgeDevice)datacenters.get(0).getHostList().get(0);
 		LogUtil.info(" EdgeDevice Consumed energy, " + (e.getMaxBatteryCapacity() - e.getCurrentBatteryCapacity()) + indent + " Time " + edgeLet.getFinishTime());
 		LogUtil.info("End-exp");
 	}
-	
+
 	/**
 	 * log initialization
 	 *
@@ -221,7 +221,7 @@ public class Example2B {
 	public void init() {
 		Configuration annotations = this.getClass().getAnnotation(Configuration.class);
 		String value = annotations.value();
-		
+
 		if (value == null || value.isEmpty()) {
 			throw new IllegalArgumentException("configuration file required!");
 		}
@@ -253,7 +253,7 @@ public class Example2B {
 				}
 			}
 		}
-		
+
 		return header;
 	}
 
@@ -274,7 +274,6 @@ public class Example2B {
 				String edgeOperationStr = melEntity.getEdgeOperationClass();
 				EdgeOperation edgeOperation = (EdgeOperation) Class.forName(edgeOperationStr).newInstance();
 
-
 				cloudletScheduler = (CloudletScheduler) Class.forName(cloudletSchedulerClassName).newInstance();
 				float datasizeShrinkFactor = melEntity.getDatasizeShrinkFactor();
 				String type = melEntity.getType();
@@ -291,7 +290,7 @@ public class Example2B {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return vms;
 	}
 
@@ -303,7 +302,7 @@ public class Example2B {
 	 */
 	private List<IoTDevice> createIoTDevice(ConfiguationEntity conf) {
 		List<IoTDevice> devices = new ArrayList<>();
-		
+
 		List<IotDeviceEntity> ioTDeviceEntities = conf.getIoTDeviceEntities();
 		for (IotDeviceEntity iotDeviceEntity : ioTDeviceEntities) {
 			List<IoTDevice> createIoTDevice = this.createIoTDevice(iotDeviceEntity);
@@ -311,7 +310,7 @@ public class Example2B {
 				return null;
 			devices.addAll(createIoTDevice);
 		}
-		
+
 		return devices;
 	}
 
@@ -385,7 +384,7 @@ public class Example2B {
 				Mobility location = new Mobility(geo_location.getLocation());
 				location.movable = geo_location.isMovable();
 				location.signalRange = geo_location.getSignalRange();
-				if(geo_location.isMovable()) {
+				if (geo_location.isMovable()) {
 					location.volecity = geo_location.getVolecity();
 				}
 
@@ -406,8 +405,7 @@ public class Example2B {
 		// 2. A Machine contains one or more PEs or CPUs/Cores.
 		// In this example, it will have only one core.
 
-		// 4. Create Host with its id and list of PEs and add them to the list
-		// of machines
+		// 4. Create Host with its id and list of PEs and add them to the list of machines
 
 		/*String arch = "x86"; // system architecture
 		String os = "Linux"; // operating system
@@ -479,7 +477,6 @@ public class Example2B {
 
 		// Here are the steps needed to create a PowerDatacenter:
 		// 1. We need to create a list to store our machine
-
 
 		VmAllcationPolicyEntity vmAllcationPolicyEntity = entity.getVmAllocationPolicy();
 		String className = vmAllcationPolicyEntity.getClassName();

@@ -80,9 +80,9 @@ public class Example3 {
 		List<EdgeDataCenter> datacenters = this.createDataCenter(conf);
 		List<MicroELement> melList = this.createMEL(conf, broker);
 		List<ConnectionHeader> header = this.setUpConnection(conf, edgeDevices, broker.getId());
-		
+
 		this.buildupEMLConnection(melList, conf.getMELEntities());			
-	
+
 		broker.submitVmList(melList);
 		broker.submitConnection(header);
 
@@ -98,7 +98,7 @@ public class Example3 {
 
 		LogUtil.simulationFinished();
 	}
-	
+
 	private void buildupEMLConnection(List<MicroELement> vmList, List<MELEntities> vmEntities) {
 		// TODO Auto-generated method stub
 		for (MicroELement microELement : vmList) {
@@ -110,7 +110,7 @@ public class Example3 {
 					break inner;
 				}			
 			}
-			
+
 			if (topologyEntity == null)
 				throw new MicroElementNotFoundException("cannot find topology for MicroElement " + id);
 			//find uplink and bind it
@@ -134,7 +134,7 @@ public class Example3 {
 				//find the MEL having the same downLinkID
 				//and set the MEL to  microELement
 
-				boolean found=false;
+				boolean found = false;
 				inner: for (MicroELement elm : vmList) {
 					if (elm.getId() == downLinkID) {
 						if (downLink.contains(elm)) {
@@ -143,7 +143,7 @@ public class Example3 {
 						downLink.add(elm);
 						found = true;
 						break inner;
-					} else 
+					} else
 						if (downLinkID == id) {
 							throw new IllegalAccessError("the EML " + id + "'s downlink cannot be itself");
 						}
@@ -154,7 +154,7 @@ public class Example3 {
 			}
 		}
 	}
-	
+
 	private static void printCloudletList(List<Cloudlet> list,List<MicroELement>melList, List<EdgeDataCenter> datacenters ) {
 		int size = list.size();
 		Cloudlet edgeLet;
@@ -188,21 +188,20 @@ public class Example3 {
 			}
 		}
 
-		
 		edgeLet = list.get(list.size()-1);
 		edgeLet.getUtilizationModelRam().getUtilization(0);
-			
-			//LogUtil.info(edgeLet = list.get());
-			System.out.println("HostList" + datacenters.get(0).getHostList().size());
 
-			EdgeDevice e = (EdgeDevice)datacenters.get(0).getHostList().get(0);
+		//LogUtil.info(edgeLet = list.get());
+		System.out.println("HostList" + datacenters.get(0).getHostList().size());
+
+		EdgeDevice e = (EdgeDevice)datacenters.get(0).getHostList().get(0);
+		LogUtil.info(" EdgeDevice Consumed energy, " + " Time " + edgeLet.getFinishTime());
+		//LogUtil.info(edgeLet = list.get());
+		if (datacenters.get(0).getHostList().size() > 1) {
+			e = (EdgeDevice)datacenters.get(0).getHostList().get(1);
 			LogUtil.info(" EdgeDevice Consumed energy, " + " Time " + edgeLet.getFinishTime());
-			//LogUtil.info(edgeLet = list.get());
-			if (datacenters.get(0).getHostList().size() > 1) {
-				e = (EdgeDevice)datacenters.get(0).getHostList().get(1);
-				LogUtil.info(" EdgeDevice Consumed energy, " + " Time " + edgeLet.getFinishTime());
-			}
-			 
+		}
+
 		LogUtil.info("End-exp");
 	}
 	
@@ -249,7 +248,7 @@ public class Example3 {
 	 */
 	private List<ConnectionHeader> setUpConnection(ConfiguationEntity conf, List<IoTDevice> edgeDevices, int brokerId) {
 		List<ConnectionHeader> header = new ArrayList<>();
-		
+
 		List<ConnectionEntity> connections = conf.getConnections();
 		for (ConnectionEntity connectionEntity : connections) {
 			int assigmentIoTId = connectionEntity.getAssigmentIoTId();
@@ -260,7 +259,7 @@ public class Example3 {
 				}
 			}
 		}
-		
+
 		return header;
 	}
 
@@ -272,7 +271,7 @@ public class Example3 {
 	 */
 	private List<MicroELement> createMEL(ConfiguationEntity conf, EdgeDataCenterBroker broker) {
 		List<MicroELement> vms = new ArrayList<>();
-		
+
 		List<MELEntities> melEntities = conf.getMELEntities();
 		for (MELEntities melEntity : melEntities) {
 			String cloudletSchedulerClassName = melEntity.getCloudletSchedulerClassName();
@@ -280,7 +279,7 @@ public class Example3 {
 			try {
 				String edgeOperationStr = melEntity.getEdgeOperationClass();
 				EdgeOperation edgeOperation = (EdgeOperation) Class.forName(edgeOperationStr).newInstance();
-				
+
 				cloudletScheduler = (CloudletScheduler) Class.forName(cloudletSchedulerClassName).newInstance();
 				float datasizeShrinkFactor = melEntity.getDatasizeShrinkFactor();
 				String type = melEntity.getType();
@@ -289,7 +288,7 @@ public class Example3 {
 						melEntity.getRam(), melEntity.getBw(), melEntity.getSize(), melEntity.getVmm(), cloudletScheduler,
 						type, datasizeShrinkFactor);
 				microELement.setEdgeOperation(edgeOperation);
-				
+
 				vms.add(microELement);
 				MicroElementTopologyEntity melTopology = melEntity.getMELTopology();
 				melTopology.setId(microELement.getId());
@@ -309,7 +308,7 @@ public class Example3 {
 	 */
 	private List<IoTDevice> createIoTDevice(ConfiguationEntity conf) {
 		List<IoTDevice> devices = new ArrayList<>();
-		
+
 		List<IotDeviceEntity> ioTDeviceEntities = conf.getIoTDeviceEntities();
 		for (IotDeviceEntity iotDeviceEntity : ioTDeviceEntities) {
 			List<IoTDevice> createIoTDevice = this.createIoTDevice(iotDeviceEntity);
@@ -328,7 +327,7 @@ public class Example3 {
 	 */
 	private List<EdgeDataCenter> createDataCenter(ConfiguationEntity conf) {
 		List<EdgeDataCenter> datacenters = new ArrayList<>();
-		
+
 		List<EdgeDataCenterEntity> edgeDatacenterEntities = conf.getEdgeDatacenter();
 		for (EdgeDataCenterEntity edgeDataCenterEntity : edgeDatacenterEntities) {
 			EdgeDataCenter createEdgeDatacenter = this.createEdgeDatacenter(edgeDataCenterEntity);
@@ -336,8 +335,8 @@ public class Example3 {
 		}
 
 		return datacenters;
-
 	}
+
 	/**
 	 * Initialize CloudSim.
 	 * @param conf
@@ -483,7 +482,6 @@ public class Example3 {
 
 		// Here are the steps needed to create a PowerDatacenter:
 		// 1. We need to create a list to store our machine
-
 
 		VmAllcationPolicyEntity vmAllcationPolicyEntity = entity.getVmAllocationPolicy();
 		String className = vmAllcationPolicyEntity.getClassName();
