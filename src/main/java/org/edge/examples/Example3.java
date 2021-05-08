@@ -122,8 +122,8 @@ public class Example3 {
 						break inner;
 					}
 				}
-			if (microELement.getUpLink() == null)
-				throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
+				if (microELement.getUpLink() == null)
+					throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
 			}
 
 			List<Integer> downLinkIds = topologyEntity.getDownLinkIds();
@@ -167,7 +167,7 @@ public class Example3 {
 
 		DecimalFormat dft = new DecimalFormat("0.00");
 		DecimalFormat idft = new DecimalFormat("000");
-		
+
 		for (int i = 0; i < size; i++) {
 			edgeLet = list.get(i);
 			//Log.print(indent + idft.format(edgeLet.getCloudletId()) + indent + indent);
@@ -204,7 +204,7 @@ public class Example3 {
 
 		LogUtil.info("End-exp");
 	}
-	
+
 	/**
 	 * log initialization
 	 *
@@ -227,7 +227,7 @@ public class Example3 {
 	public void init() {
 		Configuration annotations = this.getClass().getAnnotation(Configuration.class);
 		String value = annotations.value();
-		
+
 		if (value == null || value.isEmpty()) {
 			throw new IllegalArgumentException("configuration file required!");
 		}
@@ -235,7 +235,7 @@ public class Example3 {
 		InputStream resource = this.getClass().getClassLoader().getResourceAsStream(value);
 		Gson gson = new Gson();
 		ConfiguationEntity conf = gson.fromJson(new InputStreamReader(resource), ConfiguationEntity.class);
-	
+
 		this.initFromConfiguation(conf);
 	}
 
@@ -500,7 +500,7 @@ public class Example3 {
 
 	private EdgeType getEdgeType(String edgeTypeString) {
 		EdgeType edgeType = null;
-		
+
 		String edgeTypeUpperCaseString = edgeTypeString.toUpperCase();
 		switch(edgeTypeUpperCaseString) {
 		case "RASPBERRY_PI":
@@ -559,7 +559,7 @@ public class Example3 {
 			for (int i = 0; i <numberofEntity; i++) {
 				IoTDevice newInstance = (IoTDevice) constructor.newInstance(networkModel);
 				newInstance.setAssigmentIoTId(iotDeviceEntity.getAssignmentId());
-				
+
 				newInstance.setBatteryDrainageRate(iotDeviceEntity.getBattery_drainage_rate());
 				newInstance.getBattery().setMaxCapacity(iotDeviceEntity.getMax_battery_capacity());
 				newInstance.getBattery().setCurrentCapacity(iotDeviceEntity.getMax_battery_capacity());
@@ -573,7 +573,7 @@ public class Example3 {
 					location.volecity = iotDeviceEntity.getMobilityEntity().getVolecity();
 				}
 				newInstance.setMobility(location);
-				
+
 				devices.add(newInstance);
 			}
 

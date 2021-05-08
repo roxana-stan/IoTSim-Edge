@@ -15,7 +15,7 @@ public class EdgeDatacenterCharacteristics extends DatacenterCharacteristics {
 
 	private Class<? extends CommunicationProtocol>[] communicationProtocolSupported;
 	private Class<? extends IoTDevice>[] ioTDeviceSupported;
-	
+
 	public EdgeDatacenterCharacteristics(String architecture, String os, String vmm,
 			List<? extends EdgeDevice> hostList,
 			double timeZone, double costPerSec, double costPerMem, double costPerStorage, double costPerBw,

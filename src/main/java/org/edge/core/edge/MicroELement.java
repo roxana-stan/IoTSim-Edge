@@ -14,38 +14,38 @@ public class MicroELement extends Vm {
 	private MicroELement upLink;
 	private List<MicroELement> downLink;
 
-  /**
-   * TODO 
-   * Structure
-   * MI 
-   * *change the computing time for VMs
-   * 
-   * 
-   */
-	
+	/**
+	 * TODO 
+	 * Structure
+	 * MI 
+	 * *change the computing time for VMs
+	 * 
+	 * 
+	 */
+
 	public MicroELement(int id, int userId, double mips, int numberOfPes,
-						int ram, long bw, long size, String vmm,
-						CloudletScheduler cloudletScheduler) {
+			int ram, long bw, long size, String vmm,
+			CloudletScheduler cloudletScheduler) {
 		super(id, userId, mips, numberOfPes, ram, bw, size, vmm, cloudletScheduler);
 	}
-	
+
 	public MicroELement(int id, int userId, double mips, int numberOfPes,
-						int ram, long bw, long size, String vmm,
-						CloudletScheduler cloudletScheduler, String type, float shrinkingFactor) {
+			int ram, long bw, long size, String vmm,
+			CloudletScheduler cloudletScheduler, String type, float shrinkingFactor) {
 		super(id, userId, mips, numberOfPes, ram, bw, size, vmm, cloudletScheduler);
 	}
-	
+
 	public EdgeOperation getEdgeOperation() {
 		return edgeOperation;
 	}
-	
+
 	public void setEdgeOperation(EdgeOperation edgeOperation) {
 		this.edgeOperation = edgeOperation;
 	}
-	
+
 	public void updateDataSize() {
 	}
-	
+
 	public MicroELement getUpLink() {
 		return upLink;
 	}

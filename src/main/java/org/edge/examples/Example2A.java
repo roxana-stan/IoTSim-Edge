@@ -80,9 +80,9 @@ public class Example2A {
 		List<EdgeDataCenter> datacenters = this.createDataCenter(conf);
 		List<MicroELement> melList = this.createMEL(conf, broker);
 		List<ConnectionHeader> header = this.setUpConnection(conf, edgeDevices, broker.getId());
-		
+
 		this.buildupEMLConnection(melList, conf.getMELEntities());			
-	
+
 		broker.submitVmList(melList);
 		broker.submitConnection(header);
 
@@ -92,14 +92,14 @@ public class Example2A {
 		LogUtil.info("Number of IoT " + indent + edgeDevices.size());
 		LogUtil.info("Config of IoT Battery" + indent + edgeDevices.get(0).getBattery().getCurrentCapacity());
 		CloudSim.startSimulation();
-		
-		
+
+
 		List<Cloudlet> cloudletReceivedList = broker.getCloudletReceivedList();
-		
+
 		printCloudletList(cloudletReceivedList, melList, datacenters);
 		LogUtil.simulationFinished();
 	}
-	
+
 	private void buildupEMLConnection(List<MicroELement> vmList, List<MELEntities> vmEntities) {
 		// TODO Auto-generated method stub
 		for (MicroELement microELement : vmList) {
@@ -111,7 +111,7 @@ public class Example2A {
 					break inner;
 				}				
 			}
-			
+
 			if (topologyEntity == null)
 				throw new MicroElementNotFoundException("cannot find topology for MicroElement " + id);
 			//find uplink and bind it
@@ -126,7 +126,7 @@ public class Example2A {
 				if (microELement.getUpLink() == null)
 					throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
 			}
-			
+
 			List<Integer> downLinkIds = topologyEntity.getDownLinkIds();
 			downLinkIds.remove(null);
 			List<MicroELement> downLink = new ArrayList<>();
@@ -134,7 +134,7 @@ public class Example2A {
 			for (Integer downLinkID : downLinkIds) {
 				//find the MEL having the same downLinkID
 				//and set the MEL to  microELement
-			
+
 				boolean found = false;
 				inner: for (MicroELement elm : vmList) {
 					if (elm.getId() == downLinkID) {
@@ -155,7 +155,7 @@ public class Example2A {
 			}
 		}
 	}
-	
+
 	private static void printCloudletList(List<Cloudlet> list, List<MicroELement> melList, List<EdgeDataCenter> datacenters) {
 		int size = list.size();
 		Cloudlet edgeLet;
@@ -168,7 +168,7 @@ public class Example2A {
 
 		DecimalFormat dft = new DecimalFormat("0.00");
 		DecimalFormat idft = new DecimalFormat("000");
-		
+
 		for (int i = 0; i < size; i++) {
 			edgeLet = list.get(i);
 			//Log.print(indent + idft.format(edgeLet.getCloudletId()) + indent + indent);
@@ -189,17 +189,17 @@ public class Example2A {
 			}
 		}
 
-		
+
 		edgeLet = list.get(list.size()-1);
 		edgeLet.getUtilizationModelRam().getUtilization(0);
-			
+
 		//LogUtil.info(edgeLet = list.get());
-		
+
 		EdgeDevice e = (EdgeDevice)datacenters.get(0).getHostList().get(0);
 		LogUtil.info(" EdgeDevice Consumed energy, " + (e.getMaxBatteryCapacity() - e.getCurrentBatteryCapacity()) + indent + " Time " + edgeLet.getFinishTime());
 		LogUtil.info("End-exp");
 	}
-	
+
 	/**
 	 * log initialization
 	 *
@@ -222,7 +222,7 @@ public class Example2A {
 	public void init() {
 		Configuration annotations = this.getClass().getAnnotation(Configuration.class);
 		String value = annotations.value();
-		
+
 		if (value == null || value.isEmpty()) {
 			throw new IllegalArgumentException("configuration file required!");
 		}
@@ -230,7 +230,7 @@ public class Example2A {
 		InputStream resource = this.getClass().getClassLoader().getResourceAsStream(		value);
 		Gson gson = new Gson();
 		ConfiguationEntity conf = gson.fromJson(new InputStreamReader(resource), ConfiguationEntity.class);
-	
+
 		this.initFromConfiguation(conf);
 	}
 
@@ -243,7 +243,7 @@ public class Example2A {
 	 */
 	private List<ConnectionHeader> setUpConnection(ConfiguationEntity conf, List<IoTDevice> edgeDevices, int brokerId) {
 		List<ConnectionHeader> header = new ArrayList<>();
-		
+
 		List<ConnectionEntity> connections = conf.getConnections();
 		for (ConnectionEntity connectionEntity : connections) {
 			int assigmentIoTId = connectionEntity.getAssigmentIoTId();
@@ -254,7 +254,7 @@ public class Example2A {
 				}
 			}
 		}
-		
+
 		return header;
 	}
 
@@ -266,7 +266,7 @@ public class Example2A {
 	 */
 	private List<MicroELement> createMEL(ConfiguationEntity conf, EdgeDataCenterBroker broker) {
 		List<MicroELement> vms = new ArrayList<>();
-		
+
 		List<MELEntities> melEntities = conf.getMELEntities();
 		for (MELEntities melEntity : melEntities) {
 			String cloudletSchedulerClassName = melEntity.getCloudletSchedulerClassName();
@@ -283,7 +283,7 @@ public class Example2A {
 						melEntity.getRam(), melEntity.getBw(), melEntity.getSize(), melEntity.getVmm(), cloudletScheduler,
 						type, datasizeShrinkFactor);
 				microELement.setEdgeOperation(edgeOperation);
-				
+
 				vms.add(microELement);
 				MicroElementTopologyEntity melTopology = melEntity.getMELTopology();
 				melTopology.setId(microELement.getId());
@@ -302,7 +302,7 @@ public class Example2A {
 	 */
 	private List<IoTDevice> createIoTDevice(ConfiguationEntity conf) {
 		List<IoTDevice> devices = new ArrayList<>();
-		
+
 		List<IotDeviceEntity> ioTDeviceEntities = conf.getIoTDeviceEntities();
 		for (IotDeviceEntity iotDeviceEntity : ioTDeviceEntities) {
 			List<IoTDevice> createIoTDevice = this.createIoTDevice(iotDeviceEntity);
@@ -310,10 +310,10 @@ public class Example2A {
 				return null;
 			devices.addAll(createIoTDevice);
 		}
-		
+
 		return devices;
 	}
-	
+
 	/**
 	 * Create data center.
 	 *
@@ -331,7 +331,7 @@ public class Example2A {
 
 		return datacenters;
 	}
-	
+
 	/**
 	 * Initialize CloudSim.
 	 * @param conf
@@ -560,7 +560,7 @@ public class Example2A {
 
 				IoTDevice newInstance = (IoTDevice) constructor.newInstance(networkModel);
 				newInstance.setAssigmentIoTId(iotDeviceEntity.getAssignmentId());
-				
+
 				newInstance.setBatteryDrainageRate(iotDeviceEntity.getBattery_drainage_rate());
 				newInstance.getBattery().setMaxCapacity(iotDeviceEntity.getMax_battery_capacity());
 				newInstance.getBattery().setCurrentCapacity(iotDeviceEntity.getMax_battery_capacity());

@@ -53,27 +53,27 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 		case CloudSimTags.RESOURCE_CHARACTERISTICS_REQUEST:
 			this.processResourceCharacteristicsRequest(ev);
 			break;
-		// Resource characteristics answer
+			// Resource characteristics answer
 		case CloudSimTags.RESOURCE_CHARACTERISTICS:
 			this.processResourceCharacteristics(ev);
 			break;
-		// VM Creation answer
+			// VM Creation answer
 		case CloudSimTags.VM_CREATE_ACK:
 			this.processVmCreate(ev);
 			this.initializeNetWorkConnection(ev);
 			break;
-		// A finished cloudlet returned
+			// A finished cloudlet returned
 		case CloudSimTags.CLOUDLET_RETURN:
 			this.processCloudletReturn(ev);
 			// LogUtil.info("actuing");
 			dataShrinkAndSendToDownLink(ev);
 			//this.actuating(ev);
 			break;
-		// if the simulation finishes
+			// if the simulation finishes
 		case CloudSimTags.END_OF_SIMULATION:
 			this.shutdownEntity();
 			break;
-		// other unknown tags are processed by this method
+			// other unknown tags are processed by this method
 		default:
 			this.processOtherEvent(ev);
 			break;
@@ -97,15 +97,15 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 		double shrinkingFactor = findFirst.getEdgeOperation().getShinkingFactor();
 		for (MicroELement microELement : downLink) {
 			EdgeLet newInstance = data.newInstance(IoTDevice.cloudLetId++, shrinkingFactor);
-			
+
 			// added by Areeb
 			LogUtil.info("microELement.getId() " + microELement.getId());
-			
+
 			data.getConnectionHeader().vmId = microELement.getId();
 			newInstance.setConnectionHeader(data.getConnectionHeader());
 			newInstance.setVmId(microELement.getId());
 			newInstance.setUserId(this.getId());
-			
+
 			LogUtil.info("Shrinked edgelet " + newInstance.getCloudletId() + " sent from microELement "
 					+ findFirst.getId() + " to microELement " + microELement.getId());
 			this.send(getId(), 0, EdgeState.SENDING_TO_EDGE, newInstance);
@@ -143,7 +143,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 			this.send(connectionHeader.ioTId, networkDelay, EdgeState.REQUEST_ACTUATING, let);
 		} else {
 			LogUtil.info(CloudSim.clock() + " The edgelet " + let.getCloudletId()
-					+ " has been processed but cannot find the IoT device, so try to pass edgelet to a near edge device");
+			+ " has been processed but cannot find the IoT device, so try to pass edgelet to a near edge device");
 			Direction direction = connectionHeader.direction;
 			EdgeDevice availableDevice = this.getNearByEdgeDevice(direction, connectionHeader);
 			// Should not enter this step unless there are not available edge devices at all
@@ -177,7 +177,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 		// Theoretically it cannot be null
 		if (previousDevice == null)
 			return null;
-		
+
 		EdgeDevice availableDevice = null;
 
 		for (Host host : hostList) {
@@ -220,7 +220,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 			for (Vm vm : vmList2) {
 				if (vm.getId() == connectionHeader.vmId) {
 					EdgeDevice device = (EdgeDevice) host;
-					
+
 					//(double fileSize, double shrinkFactor,double drangeRateForProcess,double drangeRateForSending)
 					double shrink = 0.1;
 					if (vm.getId() == 1)
@@ -235,7 +235,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 	private boolean checkAvailiability(ConnectionHeader connectionInfo) {
 		EdgeDataCenter entity = (EdgeDataCenter) CloudSim
 				.getEntity(this.getVmsToDatacentersMap().get(connectionInfo.vmId));
-		
+
 		//LogUtil.info("connectionInfo.vmId " + connectionInfo.vmId);
 		List<Host> hostList = entity.getHostList();
 		EdgeDevice device = null;
@@ -321,14 +321,14 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 
 	private void sendingDataToEdge(SimEvent ev) {
 		EdgeLet data = (EdgeLet) ev.getData();
-		
+
 		// added by areeb to fix the problem if the header that is not fixed in sending from ML to ML
 		LogUtil.info("VMiD " + data.getVmId());
 		LogUtil.info("VMiD c " + data.getConnectionHeader().vmId);
-		
+
 		data.getConnectionHeader().vmId = data.getVmId();
 		boolean available = this.checkAvailiability(data.getConnectionHeader());
-		
+
 		if (available) {
 			LogUtil.info(CloudSim.clock() + " Broker received edgelet " + data.getCloudletId() + " from IoT "
 					+ data.getConnectionHeader().ioTId + " and send it to VM " + data.getConnectionHeader().vmId);
@@ -340,7 +340,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 		else {
 			LogUtil.info("Not Aval 1");
 			EdgeDevice availableDevice = this.findAvailiableDevice(data.getConnectionHeader());
-			
+
 			if (availableDevice != null) {
 				// EdgeDataCenter entity = (EdgeDataCenter)
 				// CloudSim.getEntity(getVmsToDatacentersMap().get(data.getConnectionHeader().vmId));
@@ -431,7 +431,7 @@ public class EdgeDataCenterBroker extends DatacenterBroker {
 						if (connectionHeader.ioTId == ioTId) {
 							iterator.remove();
 							LogUtil.info(CloudSim.clock() + " Send pending cloudlet " + edgeLet.getCloudletId()
-									+ " from VM " + vmId + " to IoT " + ioTId);
+							+ " from VM " + vmId + " to IoT " + ioTId);
 							this.send(connectionHeader.ioTId, this.getNetworkDelay(new DevicesInfo(ioTId, vmId)),
 									EdgeState.REQUEST_ACTUATING, edgeLet);
 						}

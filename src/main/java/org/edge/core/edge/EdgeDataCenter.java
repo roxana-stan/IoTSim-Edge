@@ -31,7 +31,7 @@ public class EdgeDataCenter extends Datacenter {
 		super(name, characteristics, vmAllocationPolicy, storageList, schedulingInterval);
 		this.characteristics = characteristics;
 	}
-	
+
 	public EdgeDatacenterCharacteristics getEdgeCharacteristics() {
 		return this.characteristics;
 	}
@@ -45,7 +45,7 @@ public class EdgeDataCenter extends Datacenter {
 		// TODO Auto-generated method stub
 		super.processEvent(ev);
 	}
-	
+
 	@Override
 	public void processOtherEvent(SimEvent ev) {
 		// TODO Auto-generated method stub

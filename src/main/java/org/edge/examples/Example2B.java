@@ -125,7 +125,7 @@ public class Example2B {
 				if (microELement.getUpLink() == null)
 					throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
 			}
-			
+
 			List<Integer> downLinkIds = topologyEntity.getDownLinkIds();
 			downLinkIds.remove(null);
 			List<MicroELement> downLink = new ArrayList<>();
@@ -154,7 +154,7 @@ public class Example2B {
 			}
 		}
 	}
-	
+
 	private static void printCloudletList(List<Cloudlet> list,List<MicroELement>melList, List<EdgeDataCenter> datacenters ) {
 		int size = list.size();
 		Cloudlet edgeLet;
@@ -167,7 +167,7 @@ public class Example2B {
 
 		DecimalFormat dft = new DecimalFormat("0.00");
 		DecimalFormat idft = new DecimalFormat("000");
-		
+
 		for (int i = 0; i < size; i++) {
 			edgeLet = list.get(i);
 			//Log.print(indent + idft.format(edgeLet.getCloudletId()) + indent + indent);
@@ -242,7 +242,7 @@ public class Example2B {
 	 */
 	private List<ConnectionHeader> setUpConnection(ConfiguationEntity conf, List<IoTDevice> edgeDevices, int brokerId) {
 		List<ConnectionHeader> header = new ArrayList<>();
-		
+
 		List<ConnectionEntity> connections = conf.getConnections();
 		for (ConnectionEntity connectionEntity : connections) {
 			int assigmentIoTId = connectionEntity.getAssigmentIoTId();
@@ -282,7 +282,7 @@ public class Example2B {
 						melEntity.getRam(), melEntity.getBw(), melEntity.getSize(), melEntity.getVmm(), cloudletScheduler,
 						type, datasizeShrinkFactor);
 				microELement.setEdgeOperation(edgeOperation);
-				
+
 				vms.add(microELement);
 				MicroElementTopologyEntity melTopology = melEntity.getMELTopology();
 				melTopology.setId(microELement.getId());
@@ -495,7 +495,7 @@ public class Example2B {
 
 	private EdgeType getEdgeType(String edgeType) {
 		EdgeType edgeType2 = null;
-		
+
 		String upperCase = edgeType.toUpperCase();
 		switch(upperCase) {
 		case "RASPBERRY_PI":
@@ -558,7 +558,7 @@ public class Example2B {
 			for (int i = 0; i <numberofEntity; i++) {
 				IoTDevice newInstance = (IoTDevice) constructor.newInstance(networkModel);
 				newInstance.setAssigmentIoTId(iotDeviceEntity.getAssignmentId());
-				
+
 				newInstance.setBatteryDrainageRate(iotDeviceEntity.getBattery_drainage_rate());
 				newInstance.getBattery().setMaxCapacity(iotDeviceEntity.getMax_battery_capacity());
 				newInstance.getBattery().setCurrentCapacity(iotDeviceEntity.getMax_battery_capacity());
@@ -572,7 +572,7 @@ public class Example2B {
 					location.volecity = iotDeviceEntity.getMobilityEntity().getVolecity();
 				}
 				newInstance.setMobility(location);
-				
+
 				devices.add(newInstance);
 			}
 

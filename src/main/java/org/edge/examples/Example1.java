@@ -125,7 +125,7 @@ public class Example1 {
 				if (microELement.getUpLink() == null)
 					throw new MicroElementNotFoundException("cannot find uplink " + upLinkId + " for MicroElement " + id);
 			}
-			
+
 			List<Integer> downLinkIds = topologyEntity.getDownLinkIds();
 			downLinkIds.remove(null);
 			List<MicroELement> downLink = new ArrayList<>();
@@ -153,7 +153,7 @@ public class Example1 {
 			}
 		}
 	}
-	
+
 	private static void printCloudletList(List<Cloudlet> list, List<MicroELement> melList, List<EdgeDataCenter> datacenters) {
 		int size = list.size();
 		Cloudlet edgeLet;
@@ -166,7 +166,7 @@ public class Example1 {
 
 		DecimalFormat dft = new DecimalFormat("0.00");
 		DecimalFormat idft = new DecimalFormat("000");
-		
+
 		for (int i = 0; i < size; i++) {
 			edgeLet = list.get(i);
 
@@ -553,7 +553,7 @@ public class Example1 {
 			for (int i = 0; i < numberofEntity; i++) {
 				IoTDevice newInstance = (IoTDevice) constructor.newInstance(networkModel);
 				newInstance.setAssigmentIoTId(iotDeviceEntity.getAssignmentId());
-				
+
 				newInstance.setBatteryDrainageRate(iotDeviceEntity.getBattery_drainage_rate());
 				newInstance.getBattery().setMaxCapacity(iotDeviceEntity.getMax_battery_capacity());
 				newInstance.getBattery().setCurrentCapacity(iotDeviceEntity.getMax_battery_capacity());
@@ -567,7 +567,7 @@ public class Example1 {
 					location.volecity = iotDeviceEntity.getMobilityEntity().getVolecity();
 				}
 				newInstance.setMobility(location);
-				
+
 				devices.add(newInstance);
 			}
 

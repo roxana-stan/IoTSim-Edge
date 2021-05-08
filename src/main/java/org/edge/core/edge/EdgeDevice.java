@@ -27,7 +27,7 @@ public class EdgeDevice extends Host {
 	private Battery battery;
 	private List<EdgeLet> pendingResponse;
 	private Mobility geo_location;
-	
+
 	/**
 	(int,
 	RamProvisioner,
@@ -60,7 +60,7 @@ public class EdgeDevice extends Host {
 		this.battery = new Battery(max_battery_capacity, current_battery_capacity);
 		this.pendingResponse = new ArrayList<>();
 	}
-	
+
 	public List<EdgeLet> getPendingResponse() {
 		return this.pendingResponse;
 	}
@@ -68,7 +68,7 @@ public class EdgeDevice extends Host {
 	public double getCurrentBatteryCapacity() {
 		return this.battery.getCurrentCapacity();
 	}
-	
+
 	public double getMaxBatteryCapacity() {
 		return this.battery.getMaxCapacity();
 	}
@@ -80,7 +80,7 @@ public class EdgeDevice extends Host {
 	public Mobility getLocation() {
 		return this.geo_location;
 	}
-	
+
 	public void setMobility(Mobility geo_location) {
 		this.geo_location = geo_location;
 	}
@@ -88,7 +88,7 @@ public class EdgeDevice extends Host {
 	public boolean isEnabled() {
 		return this.enabled;
 	}
-	
+
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
@@ -96,7 +96,7 @@ public class EdgeDevice extends Host {
 	public int getMax_IoTDevice_capacity() {
 		return this.max_IoTDevice_capacity;
 	}
-	
+
 	public void setMax_IoTDevice_capacity(int max_IoTDevice_capacity) {
 		this.max_IoTDevice_capacity = max_IoTDevice_capacity;
 	}
@@ -126,7 +126,7 @@ public class EdgeDevice extends Host {
 
 	public void update_geolocation() {
 	}
-	
+
 	//TODO
 	public void updateBatteryByProcessingCloudLet() {
 		//LogUtil.info(battery.getMaxCapacity() + " " + battery.getCurrentCapacity() + " " + battery_drainage_rate);
@@ -136,7 +136,7 @@ public class EdgeDevice extends Host {
 			this.setEnabled(false);
 		}
 	}
-	
+
 	public void updateBatteryByProcessingCloudLetAndSend(double fileSize, double shrinkFactor, double drangeRateForProcess, double drangeRateForSending) {
 		//LogUtil.info(battery.getMaxCapacity() + " " + battery.getCurrentCapacity() + " " + battery_drainage_rate);
 
@@ -144,7 +144,7 @@ public class EdgeDevice extends Host {
 		double updateBySending = fileSize * shrinkFactor * drangeRateForSending;
 
 		LogUtil.info("Edge device " + this.getId() + " -  " + this.getVmList().get(0).getId()
-					+ " ( updateByProcess = " + updateByProcess + " )" + " ( updateBySending = " + updateBySending + " )");
+				+ " ( updateByProcess = " + updateByProcess + " )" + " ( updateBySending = " + updateBySending + " )");
 		this.battery.setCurrentCapacity(this.battery.getCurrentCapacity()-(updateByProcess+updateBySending));
 
 		if (this.battery.getCurrentCapacity() <= 0) {
@@ -161,7 +161,7 @@ public class EdgeDevice extends Host {
 		double updateBySending = fileSize * shrinkFactor * drangeRateForSending;
 
 		LogUtil.info("Edge device " + this.getId() + " -  " + this.getVmList().get(0).getId()
-					+ " ( updateByProcess = " + updateByProcess + " )" + " ( updateBySending = " + updateBySending + " )");
+				+ " ( updateByProcess = " + updateByProcess + " )" + " ( updateBySending = " + updateBySending + " )");
 		this.battery.setCurrentCapacity(this.battery.getCurrentCapacity()-(updateByProcess+updateBySending));
 
 		if (this.battery.getCurrentCapacity() <= 0) {
