@@ -130,47 +130,50 @@ public class EdgeDevice extends Host {
 
 	public void update_geolocation() {
 	}
+	
+	public void updateBatteryCurrentCapacity(double consumption) {
+		battery.setCurrentCapacity(battery.getCurrentCapacity() - consumption);
+		if (battery.getCurrentCapacity() <= 0) {
+			LogUtil.info("Battery of EdgeDevice #" + this.getId() + " (VM #" + this.getVmList().get(0).getId() + ") " + "has drained!");
+			setEnabled(false);
+		}
+	}
 
 	//TODO
 	public void updateBatteryByProcessingCloudLet() {
-		//LogUtil.info(battery.getMaxCapacity() + " " + battery.getCurrentCapacity() + " " + battery_drainage_rate);
-		this.battery.setCurrentCapacity(this.battery.getCurrentCapacity()-this.battery_drainage_rate);
-		if (this.battery.getCurrentCapacity() <= 0) {
-			LogUtil.info("Edge device " + this.getId() + "( VM " + this.getVmList().get(0).getId() + " )" + "'s battery has drained");
-			this.setEnabled(false);
+		battery.setCurrentCapacity(battery.getCurrentCapacity() - battery_drainage_rate);
+		if (battery.getCurrentCapacity() <= 0) {
+			LogUtil.info("Battery of EdgeDevice #" + this.getId() + " (VM #" + this.getVmList().get(0).getId() + ") " + "has drained!");
+			setEnabled(false);
 		}
 	}
 
 	public void updateBatteryByProcessingCloudLetAndSend(double fileSize, double shrinkFactor, double drangeRateForProcess, double drangeRateForSending) {
-		//LogUtil.info(battery.getMaxCapacity() + " " + battery.getCurrentCapacity() + " " + battery_drainage_rate);
-
 		double updateByProcess = fileSize * (1-shrinkFactor) * drangeRateForProcess;
 		double updateBySending = fileSize * shrinkFactor * drangeRateForSending;
 
-		LogUtil.info("Edge device " + this.getId() + " -  " + this.getVmList().get(0).getId()
-				+ " ( updateByProcess = " + updateByProcess + " )" + " ( updateBySending = " + updateBySending + " )");
-		this.battery.setCurrentCapacity(this.battery.getCurrentCapacity()-(updateByProcess+updateBySending));
+		LogUtil.info("EdgeDevice #" + this.getId() + " -  " + this.getVmList().get(0).getId()
+				+ "(updateByProcess = " + updateByProcess + ") " + " (updateBySending = " + updateBySending + ")");
+		battery.setCurrentCapacity(battery.getCurrentCapacity() - (updateByProcess + updateBySending));
 
-		if (this.battery.getCurrentCapacity() <= 0) {
-			LogUtil.info("Edge device " + this.getId() + "( VM " + this.getVmList().get(0).getId() + " )" + "'s battery has drained");
-			this.setEnabled(false);
+		if (battery.getCurrentCapacity() <= 0) {
+			LogUtil.info("Battery of EdgeDevice #" + this.getId() + " (VM #" + this.getVmList().get(0).getId() + ") " + "has drained!");
+			setEnabled(false);
 			CloudSim.terminateSimulation();
 		}
 	}
 
 	public void updateBatteryByProcessingCloudLetAndSend2(double fileSize, double shrinkFactor, double drangeRateForProcess, double drangeRateForSending) {
-		//LogUtil.info(battery.getMaxCapacity() + " " + battery.getCurrentCapacity() + " " + battery_drainage_rate);
-
 		double updateByProcess = fileSize * (1-shrinkFactor) * drangeRateForProcess;
 		double updateBySending = fileSize * shrinkFactor * drangeRateForSending;
 
-		LogUtil.info("Edge device " + this.getId() + " -  " + this.getVmList().get(0).getId()
-				+ " ( updateByProcess = " + updateByProcess + " )" + " ( updateBySending = " + updateBySending + " )");
-		this.battery.setCurrentCapacity(this.battery.getCurrentCapacity()-(updateByProcess+updateBySending));
+		LogUtil.info("EdgeDevice #" + this.getId() + " -  " + this.getVmList().get(0).getId()
+				+ "(updateByProcess = " + updateByProcess + ") " + " (updateBySending = " + updateBySending + ")");
+		battery.setCurrentCapacity(battery.getCurrentCapacity() - (updateByProcess + updateBySending));
 
-		if (this.battery.getCurrentCapacity() <= 0) {
-			LogUtil.info("Edge device " + this.getId() + "( VM " + this.getVmList().get(0).getId() + " )" + "'s battery has drained");
-			this.setEnabled(false);
+		if (battery.getCurrentCapacity() <= 0) {
+			LogUtil.info("Battery of EdgeDevice #" + this.getId() + " (VM #" + this.getVmList().get(0).getId() + ") " + "has drained!");
+			setEnabled(false);
 		}
 	}
 
