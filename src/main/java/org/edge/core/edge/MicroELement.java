@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.Vm;
+import org.edge.core.feature.EdgeType;
 import org.edge.core.feature.operation.EdgeOperation;
 
 public class MicroELement extends Vm {
@@ -13,6 +14,7 @@ public class MicroELement extends Vm {
 	private int payload;
 	private MicroELement upLink;
 	private List<MicroELement> downLink;
+	private EdgeType type;
 
 	/**
 	 * TODO 
@@ -76,6 +78,14 @@ public class MicroELement extends Vm {
 
 	public void setPayload(int payload) {
 		this.payload = payload;
+	}
+
+	public EdgeType getType() {
+		return type;
+	}
+
+	public void setType(EdgeType type) {
+		this.type = type;
 	}
 
 }

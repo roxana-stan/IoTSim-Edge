@@ -61,6 +61,10 @@ public class EdgeDevice extends Host {
 		this.pendingResponse = new ArrayList<>();
 	}
 
+	public EdgeType getType() {
+		return type;
+	}
+
 	public List<EdgeLet> getPendingResponse() {
 		return this.pendingResponse;
 	}
